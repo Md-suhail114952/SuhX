@@ -1,0 +1,8 @@
+{
+  "name": "Remix: SUHX Studio",
+  "description": "Premium futuristic interactive portfolio for MD Suhail (SUHX) — Senior Graphic Designer, UI/UX Designer \u0026 Certified AI Generalist.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
