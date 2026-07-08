@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import * as Icons from "lucide-react";
 import { AITool } from "../types";
 import mdSuhailPortrait from "../assets/images/md_suhail_portrait_real.png.jpeg";
+import { LusionTextReveal, LusionMagnetic } from "./LusionEffects";
 
 const floatingBadges = [
   {
@@ -95,32 +96,6 @@ export default function AboutPage() {
     { name: "Motion & Branding Systems", percentage: 75, color: "bg-[#6C63FF]" },
   ];
 
-  const timeline = [
-    {
-      year: "July 2024 - Present",
-      role: "Design Consultant",
-      company: "TO THE NEW (Greater Noida, India)",
-      desc: "Designing and delivering storyboards, UI concepts, and visual narratives for enterprise systems and product teams. Collaborating closely with product managers and developers to convert high-level requirements into user-focused design solutions while supporting brand communications.",
-    },
-    {
-      year: "January 2024 - June 2024",
-      role: "Senior Graphic Designer",
-      company: "Tech2Globe (Delhi, India)",
-      desc: "Designed Amazon A+ Content (EBC), product detail pages, and storefront creatives for 20+ e-commerce brands. Improved product click-through rates by 35% through optimized layouts, typography rules, visual hierarchy, and strategic A/B testing.",
-    },
-    {
-      year: "December 2022 - December 2023",
-      role: "Senior Graphic Designer",
-      company: "Jes & Ben Groupo Pvt. Ltd. (Delhi, India)",
-      desc: "Led comprehensive branding, packaging, and marketing design initiatives. Formulated scalable brand identity systems, guidelines, and reusable component libraries that reduced design-to-delivery turnaround time by 30% across 100+ digital and print channels.",
-    },
-    {
-      year: "August 2021 - October 2022",
-      role: "UI/UX Designer",
-      company: "AgVa Healthcare (Noida, India)",
-      desc: "Conceptualized user-friendly, highly accessible human-machine interfaces for advanced healthcare systems, including key ventilators. Guided user research alongside physicians, upgrading critical task completions by 40%.",
-    },
-  ];
 
   const aiTools: AITool[] = [
     {
@@ -198,10 +173,10 @@ export default function AboutPage() {
           // The Creative Mind
         </span>
         <h2 className="text-4xl md:text-5xl font-display font-medium tracking-tight text-text-luxury mt-4">
-          Visual Architect & <span className="text-gradient-purple font-bold">AI Generalist</span>
+          <LusionTextReveal text="Visual Architect & AI Generalist" />
         </h2>
         <p className="max-w-xl mx-auto text-sm text-text-sub mt-4">
-          Fusing high-end, elegant graphic layouts with state-of-the-art visual generative scripts to build intelligent identities.
+          <LusionTextReveal text="Fusing high-end, elegant graphic layouts with state-of-the-art visual generative scripts to build intelligent identities." delay={0.2} />
         </p>
       </div>
 
@@ -269,8 +244,7 @@ export default function AboutPage() {
           <div>
             <span className="text-xs font-mono uppercase tracking-widest text-[#00D1FF]">// Executive Bio</span>
             <h3 className="text-2xl md:text-3xl font-display font-bold text-text-luxury mt-3 mb-4 leading-snug">
-              Designing Intelligent <br />
-              <span className="text-gradient font-bold">Digital Experiences</span>
+              <LusionTextReveal text="Designing Intelligent Digital Experiences" />
             </h3>
             <p className="text-sm text-text-sub leading-relaxed mb-6">
               Hello, I am <strong>MD Suhail (SUHX)</strong>. I operate at the absolute vanguard of visual communication. Fusing deep background classical drawing and modern vector symmetry rules with structural user psychology principles. 
@@ -355,47 +329,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* 4. Experience timeline panel */}
-      <div>
-        <div className="flex items-center gap-4 mb-10">
-          <div className="w-10 h-0.5 bg-gradient-to-r from-[#A855F7] to-transparent" />
-          <h3 className="text-xl md:text-2xl font-display font-medium text-text-luxury">
-            Employment <span className="text-gradient-purple font-bold">Timeline</span>
-          </h3>
-        </div>
 
-        <div className="relative border-l border-border-dark/80 ml-4 space-y-12">
-          {timeline.map((item, idx) => (
-            <motion.div
-              key={item.year}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="relative pl-8 group"
-            >
-              {/* Circular timeline node dots with glow */}
-              <div className="absolute top-1.5 left-[-6px] w-3 h-3 rounded-full bg-[#070B14] border-2 border-[#6C63FF] group-hover:border-[#00D1FF] group-hover:bg-[#00D1FF] group-hover:shadow-[0_0_10px_#00D1FF] transition-all duration-300" />
-
-              <span className="text-xs font-mono text-text-sub bg-surface-dark/60 border border-border-dark/60 px-2.5 py-1 rounded inline-block mb-2 group-hover:text-[#00D1FF] group-hover:border-[#00D1FF]/40 transition-colors duration-300">
-                {item.year}
-              </span>
-
-              <h4 className="text-lg font-display font-bold text-text-luxury group-hover:text-gradient transition-colors duration-300">
-                {item.role}
-              </h4>
-
-              <p className="text-xs font-mono text-[#00D1FF]/80 uppercase tracking-widest mt-1 mb-2">
-                {item.company}
-              </p>
-
-              <p className="text-sm text-text-sub leading-relaxed max-w-3xl group-hover:text-text-luxury transition-colors duration-300">
-                {item.desc}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
 
       {/* 5. Additional CV Meta: Grid containing Academic & Key achievements */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-24">

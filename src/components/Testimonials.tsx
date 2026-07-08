@@ -72,7 +72,7 @@ export default function Testimonials() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] rounded-full bg-radial from-[#6c63ff0d] to-transparent blur-3xl pointer-events-none" />
 
         {/* Large atmospheric quote sign watermarked */}
-        <div className="absolute top-6 left-6 text-text-sub/5 select-none pointer-events-none">
+        <div className="absolute top-6 left-6 text-text-primary select-none pointer-events-none opacity-[0.03]">
           <Quote className="w-24 h-24 stroke-[1]" />
         </div>
 

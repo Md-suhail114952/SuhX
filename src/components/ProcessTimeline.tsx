@@ -1,8 +1,19 @@
+import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import { ProcessStep } from "../types";
 import { Search, Compass, BookOpen, PenTool, Code, Cpu, ArrowDown } from "lucide-react";
 
 export default function ProcessTimeline() {
+  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setShouldReduceMotion(mediaQuery.matches);
+    const listener = (e: MediaQueryListEvent) => setShouldReduceMotion(e.matches);
+    mediaQuery.addEventListener('change', listener);
+    return () => mediaQuery.removeEventListener('change', listener);
+  }, []);
+
   const steps: ProcessStep[] = [
     {
       number: "01",
@@ -66,29 +77,65 @@ export default function ProcessTimeline() {
       {/* Connected Glowing Timeline Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
         {/* Dynamic decorative connective wire overlays for PC views */}
-        <div className="hidden lg:block absolute inset-0 top-1/2 left-4 right-4 h-0.5 bg-gradient-to-r from-primary-studio via-secondary-studio to-accent-studio opacity-15 pointer-events-none" />
+        <motion.div
+          initial={{ scaleX: 0, opacity: 0 }}
+          whileInView={{ scaleX: 1, opacity: 0.15 }}
+          viewport={{ once: true }}
+          transition={
+            shouldReduceMotion
+              ? { duration: 0.1 }
+              : { duration: 1.2, ease: "easeOut", delay: steps.length * 0.25 }
+          }
+          className="hidden lg:block absolute inset-0 top-1/2 left-4 right-4 h-0.5 bg-gradient-to-r from-primary-studio via-secondary-studio to-accent-studio origin-left pointer-events-none"
+        />
 
         {steps.map((step, idx) => {
           // Select appropriate icon
           const StepIcons = [Search, BookOpen, Compass, PenTool, Code, Cpu];
           const IconComponent = StepIcons[idx] || Search;
 
+          const initialRotation = [-4.5, 3.8, -3.2, 4.8, -2.5, 3.2][idx % 6];
+          const targetRotation = [-1.2, 1.5, -0.8, 1.2, -0.5, 0.9][idx % 6];
+
           return (
             <motion.div
               key={step.number}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: idx * 0.05 }}
-              whileHover={{ 
-                scale: 1.02,
-                borderColor: "rgba(108, 99, 255, 0.4)",
-              }}
-              className="p-8 rounded-3xl glass transition-all duration-300 relative overflow-hidden group flex flex-col justify-between cursor-default"
+              initial={
+                shouldReduceMotion 
+                  ? { opacity: 1, y: 0, scale: 1, rotate: 0, filter: "blur(0px)" }
+                  : { opacity: 0, y: -200, scale: 0.95, rotate: initialRotation, filter: "blur(6px)" }
+              }
+              whileInView={
+                shouldReduceMotion
+                  ? { opacity: 1, y: 0, scale: 1, rotate: 0, filter: "blur(0px)" }
+                  : { opacity: 1, y: 0, scale: 1, rotate: targetRotation, filter: "blur(0px)" }
+              }
+              viewport={{ once: true, amount: 0.25 }}
+              transition={
+                shouldReduceMotion
+                  ? { duration: 0.1 }
+                  : {
+                      type: "spring",
+                      stiffness: 120,
+                      damping: 14,
+                      delay: idx * 0.25,
+                    }
+              }
+              whileHover={
+                shouldReduceMotion
+                  ? {}
+                  : {
+                      scale: 1.02,
+                      y: -6,
+                      rotate: 0,
+                      borderColor: "rgba(108, 99, 255, 0.4)",
+                    }
+              }
+              className="p-8 rounded-3xl glass transition-all duration-300 relative overflow-hidden group flex flex-col justify-between cursor-default hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
               id={`process-step-${step.number}`}
             >
               {/* Giant Watermarked Number Indicator */}
-              <div className="absolute top-4 right-6 text-7xl font-display font-black text-text-sub/5 select-none group-hover:text-primary-studio/15 transition-colors duration-300">
+              <div className="absolute top-4 right-6 text-7xl font-display font-black text-text-primary select-none opacity-[0.03] group-hover:opacity-[0.1] transition-all duration-300">
                 {step.number}
               </div>
 

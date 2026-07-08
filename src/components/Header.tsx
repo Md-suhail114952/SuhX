@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Menu, X, ArrowUpRight, Sparkles } from "lucide-react";
 import suhxLogo from "../assets/images/suhx_logo_1779791742292.png";
 import { useTransparentLogo } from "../hooks/useTransparentLogo";
+import { LusionMagnetic } from "./LusionEffects";
 
 interface HeaderProps {
   activeTab: string;
@@ -52,56 +53,63 @@ export default function Header({ activeTab, setActiveTab, onRequestChatOpen }: H
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           
           {/* Logo Frame */}
-          <div 
-            onClick={() => handleNavClick("home")}
-            className="flex items-center cursor-pointer group"
-          >
-            <img 
-              src={transparentLogo} 
-              alt="SUHX Logo" 
-              className="h-7 md:h-9 w-auto object-contain select-none group-hover:scale-105 transition-transform duration-300"
-              referrerPolicy="no-referrer"
-            />
-          </div>
+          <LusionMagnetic strength={0.25}>
+            <div 
+              onClick={() => handleNavClick("home")}
+              className="flex items-center cursor-pointer group"
+            >
+              <img 
+                src={transparentLogo} 
+                alt="SUHX Logo" 
+                className="h-7 md:h-9 w-auto object-contain select-none group-hover:scale-105 transition-transform duration-300"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          </LusionMagnetic>
 
           {/* Desktop Links */}
           <nav className="hidden md:flex items-center gap-1.5 p-1 rounded-xl bg-surface-dark/70 border border-border-dark/40 backdrop-blur-md">
             {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => handleNavClick(item.id)}
-                className={`px-4 py-2 text-xs font-mono rounded-lg transition-all cursor-pointer ${
-                  activeTab === item.id
-                    ? "bg-gradient-to-r from-[#6C63FF]/15 to-[#00D1FF]/15 border-border-dark text-text-luxury border"
-                    : "text-text-sub hover:text-text-luxury hover:bg-surface-dark/10"
-                }`}
-              >
-                {item.label}
-              </button>
+              <LusionMagnetic key={item.id} strength={0.35}>
+                <button
+                  onClick={() => handleNavClick(item.id)}
+                  className={`px-4 py-2 text-xs font-mono rounded-lg transition-all cursor-pointer ${
+                    activeTab === item.id
+                      ? "bg-gradient-to-r from-[#6C63FF]/15 to-[#00D1FF]/15 border-border-dark text-text-luxury border"
+                      : "text-text-sub hover:text-text-luxury hover:bg-surface-dark/10"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              </LusionMagnetic>
             ))}
           </nav>
 
           {/* Actions CTA buttons */}
           <div className="hidden md:flex items-center gap-3">
             {/* Assistant launch badge */}
-            <button
-               onClick={onRequestChatOpen}
-               className="flex items-center gap-2 py-2 px-3.5 rounded-xl bg-[#0a0e17] border border-[#6C63FF]/30 text-xs font-mono text-[#6C63FF] hover:text-[#00D1FF] hover:border-[#00D1FF]/40 hover:bg-[#00D1FF]/5 hover:shadow-[0_0_15px_rgba(0,209,255,0.15)] transition-all cursor-pointer"
-            >
-              <Sparkles className="w-3.5 h-3.5 animate-pulse fill-current" />
-              <span>Ask SUHX-AI</span>
-            </button>
+            <LusionMagnetic strength={0.2}>
+              <button
+                 onClick={onRequestChatOpen}
+                 className="flex items-center gap-2 py-2 px-3.5 rounded-xl bg-[#0a0e17] border border-[#6C63FF]/30 text-xs font-mono text-[#6C63FF] hover:text-[#00D1FF] hover:border-[#00D1FF]/40 hover:bg-[#00D1FF]/5 hover:shadow-[0_0_15px_rgba(0,209,255,0.15)] transition-all cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5 animate-pulse fill-current" />
+                <span>Ask SUHX-AI</span>
+              </button>
+            </LusionMagnetic>
 
-            <button
-              onClick={() => {
-                const elem = document.getElementById("contact");
-                if (elem) elem.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="py-2.5 px-4 rounded-xl bg-gradient-to-r from-primary-studio to-secondary-studio text-center text-xs font-bold font-sans text-text-luxury flex items-center gap-1 hover:opacity-90 active:scale-[0.98] transition-all glow-btn cursor-pointer"
-            >
-              <span>Build Studio Connect</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </button>
+            <LusionMagnetic strength={0.2}>
+              <button
+                onClick={() => {
+                  const elem = document.getElementById("contact");
+                  if (elem) elem.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="py-2.5 px-4 rounded-xl bg-gradient-to-r from-primary-studio to-secondary-studio text-center text-xs font-bold font-sans text-text-luxury flex items-center gap-1 hover:opacity-90 active:scale-[0.98] transition-all glow-btn cursor-pointer"
+              >
+                <span>Build Studio Connect</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </button>
+            </LusionMagnetic>
           </div>
 
           {/* Mobile menu trigger */}

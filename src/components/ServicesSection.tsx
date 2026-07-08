@@ -1,8 +1,13 @@
+import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import * as Icons from "lucide-react";
 import { Service } from "../types";
 
 export default function ServicesSection() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [visibleCards, setVisibleCards] = useState(3);
+  const [isPaused, setIsPaused] = useState(false);
+
   const services: Service[] = [
     {
       id: "ui-ux",
@@ -70,10 +75,68 @@ export default function ServicesSection() {
     },
   ];
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setVisibleCards(1);
+      } else if (window.innerWidth < 1024) {
+        setVisibleCards(2);
+      } else {
+        setVisibleCards(3);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => {
+        const maxIndex = services.length - visibleCards;
+        if (prevIndex >= maxIndex) {
+          return 0;
+        } else {
+          return prevIndex + 1;
+        }
+      });
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [visibleCards, isPaused, services.length]);
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev === 0 ? services.length - visibleCards : prev - 1));
+  };
+
+  const handleNext = () => {
+    const maxIndex = services.length - visibleCards;
+    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+  };
+
+  let translateX = "0px";
+  if (visibleCards === 1) {
+    translateX = `calc(-${currentIndex * 100}% - ${currentIndex * 24}px)`;
+  } else if (visibleCards === 2) {
+    translateX = `calc(-${currentIndex * 50}% - ${currentIndex * 12}px)`;
+  } else {
+    translateX = `calc(-${currentIndex * 33.333}% - ${currentIndex * 8}px)`;
+  }
+
+  const cardWidthClass = 
+    visibleCards === 1 
+      ? "w-full shrink-0" 
+      : visibleCards === 2 
+        ? "w-[calc(50%-12px)] shrink-0" 
+        : "w-[calc(33.333%-16px)] shrink-0";
+
   return (
     <section id="services" className="py-24 max-w-7xl mx-auto px-6 relative z-10">
       {/* Structural Header */}
-      <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-16 gap-4">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-6">
         <div>
           <span className="text-xs font-mono uppercase tracking-widest text-[#6C63FF] bg-[#6C63FF]/10 px-3 py-1.5 rounded-full">
             // Studio Capability
@@ -82,63 +145,108 @@ export default function ServicesSection() {
             Forging Digital <span className="text-gradient font-bold">Intelligences</span>
           </h2>
         </div>
-        <p className="max-w-md text-sm text-text-sub leading-relaxed">
-          Merging structural classic layout discipline with elite AI generative pipelines to produce digital experience masterpieces.
-        </p>
+        
+        <div className="flex flex-col sm:flex-row sm:items-center gap-6">
+          <p className="max-w-md text-sm text-text-sub leading-relaxed">
+            Merging structural classic layout discipline with elite AI generative pipelines to produce digital experience masterpieces.
+          </p>
+          
+          {/* Navigation Arrows */}
+          <div className="flex gap-2 shrink-0">
+            <button
+              onClick={handlePrev}
+              className="w-11 h-11 rounded-full border border-border-dark bg-surface-dark/40 hover:bg-[#6C63FF]/15 hover:border-[#6C63FF]/40 flex items-center justify-center text-text-luxury transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95"
+              aria-label="Previous slide"
+            >
+              <Icons.ArrowLeft className="w-4 h-4" />
+            </button>
+            <button
+              onClick={handleNext}
+              className="w-11 h-11 rounded-full border border-border-dark bg-surface-dark/40 hover:bg-[#6C63FF]/15 hover:border-[#6C63FF]/40 flex items-center justify-center text-text-luxury transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95"
+              aria-label="Next slide"
+            >
+              <Icons.ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* Services Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {services.map((service, idx) => {
-          // Dynamic Lucide selection with fallbacks
-          let IconComp = (Icons as any)[service.icon] || Icons.Layout;
-          // Figma-specific manual icon drawing since Lucide may not map easily
-          if (service.icon === "Figma") {
-            IconComp = Icons.Compass; // Compass is nice substitute, or let's keep Compass
-          }
+      {/* Services Slider Container */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="relative"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
+        <div className="overflow-hidden px-4 py-8 -mx-4 -my-8">
+          <motion.div
+            animate={{ x: translateX }}
+            transition={{ type: "spring", stiffness: 90, damping: 18 }}
+            className="flex gap-6"
+          >
+            {services.map((service) => {
+              // Dynamic Lucide selection with fallbacks
+              let IconComp = (Icons as any)[service.icon] || Icons.Layout;
+              if (service.icon === "Figma") {
+                IconComp = Icons.Compass;
+              }
 
-          return (
-            <motion.div
-              key={service.id}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: idx * 0.05, ease: "easeOut" }}
-              whileHover={{ y: -8 }}
-              className={`flex flex-col justify-between p-6 rounded-2xl glass transition-all duration-500 group cursor-default relative overflow-hidden ${service.glowColor}`}
-              id={`service-card-${service.id}`}
-            >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-radial-[circle_at_top_right,rgba(108,99,255,0.02),transparent_60%] group-hover:bg-radial-[circle_at_top_right,rgba(108,99,255,0.08),transparent_60%] transition-colors duration-500" />
+              return (
+                <div
+                  key={service.id}
+                  className={`flex flex-col justify-between p-6 rounded-2xl glass transition-all duration-500 group cursor-default relative overflow-hidden h-[340px] hover:-translate-y-2 ${cardWidthClass} ${service.glowColor}`}
+                  id={`service-card-${service.id}`}
+                >
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-radial-[circle_at_top_right,rgba(108,99,255,0.02),transparent_60%] group-hover:bg-radial-[circle_at_top_right,rgba(108,99,255,0.08),transparent_60%] transition-colors duration-500" />
 
-              <div>
-                {/* Glowing Icon Frame */}
-                <div className="w-12 h-12 rounded-xl bg-surface-dark/80 border border-border-dark flex items-center justify-center mb-6 text-text-luxury group-hover:text-[#00D1FF] group-hover:border-[#00D1FF]/40 group-hover:bg-[#00D1FF]/5 transition-all duration-300">
-                  <IconComp className="w-6 h-6 stroke-[1.5]" />
+                  <div>
+                    {/* Glowing Icon Frame */}
+                    <div className="w-12 h-12 rounded-xl bg-surface-dark/80 border border-border-dark flex items-center justify-center mb-6 text-text-luxury group-hover:text-[#00D1FF] group-hover:border-[#00D1FF]/40 group-hover:bg-[#00D1FF]/5 transition-all duration-300">
+                      <IconComp className="w-6 h-6 stroke-[1.5]" />
+                    </div>
+
+                    <h3 className="text-xl font-display font-bold text-text-luxury mb-3 group-hover:text-gradient transition-all duration-300">
+                      {service.title}
+                    </h3>
+
+                    <p className="text-sm text-text-sub leading-relaxed mb-6 group-hover:text-text-luxury transition-colors duration-300 line-clamp-3">
+                      {service.description}
+                    </p>
+                  </div>
+
+                  {/* Tags Container */}
+                  <div className="flex flex-wrap gap-1.5 pt-4 border-t border-border-dark/60">
+                    {service.tags.slice(0, 3).map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[10px] font-mono text-text-sub/70 bg-surface-dark px-2.5 py-1 rounded-md border border-border-dark/30 group-hover:border-secondary-studio/25 group-hover:text-secondary-studio transition-colors duration-300"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
+              );
+            })}
+          </motion.div>
+        </div>
+      </motion.div>
 
-                <h3 className="text-xl font-display font-bold text-text-luxury mb-3 group-hover:text-gradient transition-all duration-300">
-                  {service.title}
-                </h3>
-
-                <p className="text-sm text-text-sub leading-relaxed mb-6 group-hover:text-text-luxury transition-colors duration-300">
-                  {service.description}
-                </p>
-              </div>
-
-              {/* Tags Container */}
-              <div className="flex flex-wrap gap-1.5 pt-4 border-t border-border-dark/60">
-                {service.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-[10px] font-mono text-text-sub/70 bg-surface-dark px-2.5 py-1 rounded-md border border-border-dark/30 group-hover:border-secondary-studio/25 group-hover:text-secondary-studio transition-colors duration-300"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          );
-        })}
+      {/* Navigation Dots */}
+      <div className="flex justify-center gap-2 mt-8">
+        {Array.from({ length: services.length - visibleCards + 1 }).map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrentIndex(idx)}
+            className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+              currentIndex === idx ? "w-8 bg-[#6C63FF]" : "w-2 bg-border-dark/60 hover:bg-border-dark"
+            }`}
+            aria-label={`Go to slide ${idx + 1}`}
+          />
+        ))}
       </div>
     </section>
   );

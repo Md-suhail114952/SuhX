@@ -1,11 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Project } from "../types";
 import { X, ArrowUpRight, Scale, Info, Sparkles, Calendar, User } from "lucide-react";
+import { LusionTextReveal, LusionMagnetic } from "./LusionEffects";
 
 export default function PortfolioShowcase() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [activeModalProject, setActiveModalProject] = useState<Project | null>(null);
+  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setShouldReduceMotion(mediaQuery.matches);
+    const listener = (e: MediaQueryListEvent) => setShouldReduceMotion(e.matches);
+    mediaQuery.addEventListener('change', listener);
+    return () => mediaQuery.removeEventListener('change', listener);
+  }, []);
 
   const categories = ["All", "UI UX Design", "Branding", "Social Media Designs", "AI Generated Work"];
 
@@ -108,26 +118,27 @@ export default function PortfolioShowcase() {
           // Showcase Guild
         </span>
         <h2 className="text-4xl md:text-5xl font-display font-medium tracking-tight text-text-luxury mt-4">
-          Atmospheric <span className="text-gradient font-bold">Case Studies</span>
+          <LusionTextReveal text="Atmospheric Case Studies" />
         </h2>
         <p className="max-w-xl mx-auto text-sm text-text-sub mt-4">
-          A collection of next-generation physical interfaces, digital platforms, and generative designs made with pixel-perfect intent.
+          <LusionTextReveal text="A collection of next-generation physical interfaces, digital platforms, and generative designs made with pixel-perfect intent." delay={0.2} />
         </p>
 
         {/* Categories Nav */}
         <div className="flex flex-wrap justify-center items-center gap-2 mt-10">
           {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 text-xs font-mono rounded-lg transition-all duration-300 border cursor-pointer ${
-                selectedCategory === cat
-                  ? "bg-primary-studio/15 text-text-luxury border-primary-studio/50 shadow-[0_0_15px_rgba(108,99,255,0.2)]"
-                  : "bg-surface-dark border-border-dark/60 text-text-sub hover:text-text-luxury hover:border-text-sub/40"
-              }`}
-            >
-              {cat}
-            </button>
+            <LusionMagnetic key={cat} strength={0.3}>
+              <button
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-4 py-2 text-xs font-mono rounded-lg transition-all duration-300 border cursor-pointer ${
+                  selectedCategory === cat
+                    ? "bg-primary-studio/15 text-text-luxury border-primary-studio/50 shadow-[0_0_15px_rgba(108,99,255,0.2)]"
+                    : "bg-surface-dark border-border-dark/60 text-text-sub hover:text-text-luxury hover:border-text-sub/40"
+                }`}
+              >
+                {cat}
+              </button>
+            </LusionMagnetic>
           ))}
         </div>
       </div>
@@ -138,16 +149,17 @@ export default function PortfolioShowcase() {
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
       >
         <AnimatePresence mode="popLayout">
-          {filteredProjects.map((p) => (
+          {filteredProjects.map((p, idx) => (
             <motion.div
               layout
               key={p.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.5 }}
-              whileHover={{ y: -6 }}
-              className="group rounded-2xl overflow-hidden glass hover:border-secondary-studio/30 transition-all duration-300 flex flex-col justify-between"
+              initial={shouldReduceMotion ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" } : { opacity: 0, y: 60, scale: 0.96, filter: "blur(8px)" }}
+              whileInView={shouldReduceMotion ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" } : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+              viewport={{ once: true, amount: 0.2 }}
+              exit={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
+              transition={shouldReduceMotion ? { duration: 0.1 } : { duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: idx * 0.15 }}
+              whileHover={shouldReduceMotion ? {} : { y: -6, scale: 1.02 }}
+              className="group rounded-2xl overflow-hidden glass hover:border-secondary-studio/30 transition-all duration-300 flex flex-col justify-between hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
               id={`portfolio-item-${p.id}`}
             >
               <div 
@@ -161,8 +173,12 @@ export default function PortfolioShowcase() {
                   </span>
                 )}
                 
-                {/* Zooming background image */}
-                <img
+                {/* Zooming background image with layered entrance */}
+                <motion.img
+                  initial={shouldReduceMotion ? { scale: 1 } : { scale: 1.1 }}
+                  whileInView={shouldReduceMotion ? { scale: 1 } : { scale: 1 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={shouldReduceMotion ? { duration: 0.1 } : { duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: idx * 0.15 + 0.1 }}
                   src={p.image}
                   referrerPolicy="no-referrer"
                   alt={p.title}
