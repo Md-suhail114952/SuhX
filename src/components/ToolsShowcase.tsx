@@ -206,7 +206,7 @@ export default function ToolsShowcase() {
   ];
 
   // Number of cards to show based on responsive state
-  const visibleCardsCount = isMobile ? 3 : 5;
+  const visibleCardsCount = 5;
   const cardsToShow = tools.slice(0, visibleCardsCount);
 
   // Dynamic rotations for a natural "loose pile" scattering feel

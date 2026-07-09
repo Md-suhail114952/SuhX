@@ -132,10 +132,10 @@ export default function PortfolioShowcase() {
     : [];
 
   const handleCardClick = (cardId: string) => {
-    if (spinningCardId) return; // Block double trigger / only one card animates at a time
-
-    setSpinningCardId(cardId);
-    setFlippedCardId(prev => prev === cardId ? null : cardId);
+    const p = projects.find(proj => proj.id === cardId);
+    if (p && p.link) {
+      window.open(p.link, "_blank", "noopener,noreferrer");
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent, cardId: string) => {

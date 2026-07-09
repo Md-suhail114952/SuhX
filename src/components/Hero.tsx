@@ -6,6 +6,7 @@ import { LusionMagnetic, LusionTextReveal } from "./LusionEffects";
 import suhxLogo from "../assets/images/suhx_logo_1779791742292.png";
 import { useTransparentLogo } from "../hooks/useTransparentLogo";
 import AgenticBackground from "./AgenticBackground";
+import FloatingSoftwareIcons from "./FloatingSoftwareIcons";
 
 interface HeroProps {
   onRequestChatOpen: () => void;
@@ -100,6 +101,9 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
       {/* Cinematic Agentic Background */}
       <AgenticBackground />
 
+      {/* Floating Design & Creative Softwares Icons */}
+      <FloatingSoftwareIcons />
+
       {/* Hero Central Content */}
       <motion.div
         variants={containerVariants}
@@ -169,7 +173,7 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
           {/* See Works */}
           <LusionMagnetic strength={0.2}>
             <button
-              onClick={() => scrollToSection("work")}
+              onClick={() => scrollToSection("portfolio")}
               className="group relative inline-flex items-center justify-center rounded-full text-sm font-medium px-8 py-4 bg-gradient-to-r from-[#6C63FF] to-[#00D1FF] text-white hover:text-white shadow-[0_0_20px_rgba(108,99,255,0.25)] hover:shadow-[0_0_30px_rgba(0,209,255,0.45)] overflow-hidden transition-all duration-300 hover:scale-105 cursor-pointer z-10 border-none"
             >
               {/* Overlay glow on hover */}
