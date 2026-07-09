@@ -4,7 +4,7 @@ import suhxLogo from "../assets/images/suhx_logo_1779791742292.png";
 import { useTransparentLogo } from "../hooks/useTransparentLogo";
 
 export default function Footer() {
-  const transparentLogo = useTransparentLogo(suhxLogo);
+  const { src: logoSrc, isReady: logoReady } = useTransparentLogo(suhxLogo);
   const socialLinks = [
     {
       name: "LinkedIn",
@@ -52,9 +52,12 @@ export default function Footer() {
         {/* Left Column Brand Details */}
         <div className="md:col-span-5 space-y-5">
           <div className="flex items-center">
-            <img 
-              src={transparentLogo} 
+            <motion.img 
+              src={logoSrc} 
               alt="SUHX Logo" 
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={logoReady ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
               className="h-7 md:h-9 w-auto object-contain select-none"
               referrerPolicy="no-referrer"
             />

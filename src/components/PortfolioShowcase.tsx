@@ -1,20 +1,36 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Project } from "../types";
-import { X, ArrowUpRight, Scale, Info, Sparkles, Calendar, User } from "lucide-react";
+import { X, ArrowUpRight, Sparkles, Calendar, User } from "lucide-react";
 import { LusionTextReveal, LusionMagnetic } from "./LusionEffects";
 
 export default function PortfolioShowcase() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [activeModalProject, setActiveModalProject] = useState<Project | null>(null);
   const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
+  const [hoveredCardId, setHoveredCardId] = useState<string | null>(null);
+  const [spinningCardId, setSpinningCardId] = useState<string | null>(null);
+  const [flippedCardId, setFlippedCardId] = useState<string | null>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Detect user preference for reduced motion
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     setShouldReduceMotion(mediaQuery.matches);
     const listener = (e: MediaQueryListEvent) => setShouldReduceMotion(e.matches);
     mediaQuery.addEventListener('change', listener);
     return () => mediaQuery.removeEventListener('change', listener);
+  }, []);
+
+  // Track global cursor coordinates for the follow-cursor viewing circle
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
   const categories = ["All", "UI UX Design", "Branding", "Social Media Designs", "AI Generated Work"];
@@ -110,29 +126,95 @@ export default function PortfolioShowcase() {
     ? projects
     : projects.filter(p => p.category === selectedCategory);
 
+  // Duplicate filtered projects list multiple times to achieve a seamless horizontal drift marquee
+  const displayProjects = filteredProjects.length > 0
+    ? [...filteredProjects, ...filteredProjects, ...filteredProjects]
+    : [];
+
+  const handleCardClick = (cardId: string) => {
+    if (spinningCardId) return; // Block double trigger / only one card animates at a time
+
+    setSpinningCardId(cardId);
+    setFlippedCardId(prev => prev === cardId ? null : cardId);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent, cardId: string) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleCardClick(cardId);
+    }
+  };
+
+  const handleViewDetails = (e: React.MouseEvent, p: Project) => {
+    e.stopPropagation();
+    setActiveModalProject(p);
+  };
+
+  // Drift is paused when a card is hovered or currently spinning
+  const isPaused = hoveredCardId !== null || spinningCardId !== null;
+
   return (
-    <section id="portfolio" className="py-24 max-w-7xl mx-auto px-6 relative z-10 border-t border-border-dark/40">
+    <section id="portfolio" className="py-24 max-w-7xl mx-auto px-6 relative z-10 border-t border-border-dark/40 overflow-hidden">
+      {/* Self-contained CSS for high-performance seamless marquee layout */}
+      <style>{`
+        @keyframes marqueeDrift {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-33.33333%);
+          }
+        }
+        .animate-marquee {
+          animation: marqueeDrift 55s linear infinite;
+        }
+      `}</style>
+
+      {/* Floating custom View Follow-Cursor */}
+      <AnimatePresence>
+        {hoveredCardId && !shouldReduceMotion && (
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 450, damping: 25 }}
+            className="fixed pointer-events-none z-50 w-16 h-16 rounded-full bg-gradient-to-tr from-[#6C63FF] to-[#00D1FF] text-white font-mono text-[9px] font-bold flex flex-col items-center justify-center tracking-widest shadow-[0_0_20px_rgba(0,209,255,0.4)]"
+            style={{
+              left: mousePos.x - 32,
+              top: mousePos.y - 32,
+            }}
+          >
+            <span>{flippedCardId === hoveredCardId ? "FLIP" : "VIEW"}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Section Head */}
-      <div className="text-center mb-16">
+      <div className="text-center mb-12">
         <span className="text-xs font-mono uppercase tracking-widest text-[#00D1FF] bg-[#00D1FF]/10 px-3 py-1.5 rounded-full inline-block">
           // Showcase Guild
         </span>
         <h2 className="text-4xl md:text-5xl font-display font-medium tracking-tight text-text-luxury mt-4">
-          <LusionTextReveal text="Atmospheric Case Studies" />
+          <LusionTextReveal text="Interactive Case Studies" />
         </h2>
         <p className="max-w-xl mx-auto text-sm text-text-sub mt-4">
-          <LusionTextReveal text="A collection of next-generation physical interfaces, digital platforms, and generative designs made with pixel-perfect intent." delay={0.2} />
+          <LusionTextReveal text="A collection of next-generation digital products, immersive experiences, and visual guidelines. Click on any card to flip and view premium summaries." delay={0.15} />
         </p>
 
         {/* Categories Nav */}
-        <div className="flex flex-wrap justify-center items-center gap-2 mt-10">
+        <div className="flex flex-wrap justify-center items-center gap-2 mt-8">
           {categories.map((cat) => (
             <LusionMagnetic key={cat} strength={0.3}>
               <button
-                onClick={() => setSelectedCategory(cat)}
+                onClick={() => {
+                  setSelectedCategory(cat);
+                  setFlippedCardId(null);
+                  setSpinningCardId(null);
+                  setHoveredCardId(null);
+                }}
                 className={`px-4 py-2 text-xs font-mono rounded-lg transition-all duration-300 border cursor-pointer ${
                   selectedCategory === cat
-                    ? "bg-primary-studio/15 text-text-luxury border-primary-studio/50 shadow-[0_0_15px_rgba(108,99,255,0.2)]"
+                    ? "bg-[#6C63FF]/15 text-text-luxury border-[#6C63FF]/50 shadow-[0_0_15px_rgba(108,99,255,0.2)]"
                     : "bg-surface-dark border-border-dark/60 text-text-sub hover:text-text-luxury hover:border-text-sub/40"
                 }`}
               >
@@ -143,94 +225,217 @@ export default function PortfolioShowcase() {
         </div>
       </div>
 
-      {/* Projects Grid Grid */}
-      <motion.div
-        layout
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+      {/* Horizontal Drift case-study container */}
+      <div 
+        ref={containerRef}
+        className="relative w-full h-[520px] flex items-center justify-start perspective-[1200px] overflow-hidden"
       >
-        <AnimatePresence mode="popLayout">
-          {filteredProjects.map((p, idx) => (
-            <motion.div
-              layout
-              key={p.id}
-              initial={shouldReduceMotion ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" } : { opacity: 0, y: 60, scale: 0.96, filter: "blur(8px)" }}
-              whileInView={shouldReduceMotion ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" } : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-              viewport={{ once: true, amount: 0.2 }}
-              exit={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
-              transition={shouldReduceMotion ? { duration: 0.1 } : { duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: idx * 0.15 }}
-              whileHover={shouldReduceMotion ? {} : { y: -6, scale: 1.02 }}
-              className="group rounded-2xl overflow-hidden glass hover:border-secondary-studio/30 transition-all duration-300 flex flex-col justify-between hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
-              id={`portfolio-item-${p.id}`}
-            >
-              <div 
-                className="relative overflow-hidden aspect-video cursor-pointer"
-                onClick={() => setActiveModalProject(p)}
+        <div 
+          className={`flex gap-8 py-6 ${shouldReduceMotion ? "flex-wrap justify-center overflow-x-auto w-full" : "animate-marquee"}`}
+          style={{
+            animationPlayState: isPaused ? "paused" : "running",
+            width: shouldReduceMotion ? "100%" : "max-content"
+          }}
+        >
+          {displayProjects.map((p, idx) => {
+            const isFlipped = flippedCardId === p.id;
+            const isSpinning = spinningCardId === p.id;
+            const isHovered = hoveredCardId === p.id;
+
+            // When some card is hovered, non-focused ones scale down slightly and dim out
+            const isFocused = hoveredCardId === null || hoveredCardId === p.id || flippedCardId === p.id;
+
+            return (
+              <motion.div
+                key={`${p.id}-${idx}`}
+                // Scroll entrance animation
+                initial={shouldReduceMotion ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 50, scale: 0.95 }}
+                whileInView={shouldReduceMotion ? { opacity: 1, y: 0, scale: 1 } : { opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, amount: 0.25 }}
+                transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.6, delay: (idx % filteredProjects.length) * 0.12, ease: "easeOut" }}
+                animate={shouldReduceMotion ? {} : {
+                  opacity: isFocused ? 1 : 0.45,
+                  scale: isFocused ? 1 : 0.9,
+                }}
+                className="transition-all duration-500 ease-out shrink-0"
               >
-                {/* Metric Overlay Badge */}
-                {p.metrics && (
-                  <span className="absolute top-4 left-4 z-10 text-[10px] font-mono text-text-luxury bg-[#070B14]/85 border border-[#00D1FF]/40 px-3 py-1 rounded-full shadow-lg backdrop-blur-md">
-                    ⚡ {p.metrics}
-                  </span>
-                )}
-                
-                {/* Zooming background image with layered entrance */}
-                <motion.img
-                  initial={shouldReduceMotion ? { scale: 1 } : { scale: 1.1 }}
-                  whileInView={shouldReduceMotion ? { scale: 1 } : { scale: 1 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={shouldReduceMotion ? { duration: 0.1 } : { duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: idx * 0.15 + 0.1 }}
-                  src={p.image}
-                  referrerPolicy="no-referrer"
-                  alt={p.title}
-                  className="w-full h-full object-cover transform scale-100 group-hover:scale-110 transition-transform duration-700 ease-out"
-                />
-
-                {/* Dark Hover overlay screen */}
-                <div className="absolute inset-0 bg-[#070B14]/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <div className="w-12 h-12 rounded-full glass flex items-center justify-center text-[#00D1FF] border-[#00D1FF]/40 transform scale-75 group-hover:scale-100 transition-transform duration-300">
-                    <ArrowUpRight className="w-5 h-5" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Showcase metadata card */}
-              <div className="p-6">
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#00D1FF]">
-                    {p.category}
-                  </span>
-                  <span className="text-[10px] font-mono text-text-sub">
-                    {p.year}
-                  </span>
-                </div>
-                
-                <h3 
-                  onClick={() => setActiveModalProject(p)}
-                  className="text-lg font-display font-bold text-text-luxury hover:text-[#00D1FF] cursor-pointer transition-colors duration-200"
+                {/* Interactive 3D Card frame */}
+                <motion.div
+                  onClick={() => handleCardClick(p.id)}
+                  onKeyDown={(e) => handleKeyDown(e, p.id)}
+                  onMouseEnter={() => setHoveredCardId(p.id)}
+                  onMouseLeave={() => setHoveredCardId(null)}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`Case Study: ${p.title}. Click to reveal key metrics.`}
+                  className="relative w-80 h-96 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl focus:outline-none focus:ring-2 focus:ring-[#00D1FF]/50"
+                  style={{
+                    transformStyle: "preserve-3d",
+                    zIndex: isSpinning || isFlipped ? 50 : 10,
+                  }}
+                  animate={shouldReduceMotion ? {} : {
+                    rotateY: isFlipped ? 180 : 0,
+                    scale: isSpinning ? [1, 1.15, 1] : isHovered ? 1.02 : 1,
+                    z: isSpinning ? [0, 80, 0] : 0,
+                    filter: isSpinning ? ["blur(0px)", "blur(2px)", "blur(0px)"] : "blur(0px)",
+                  }}
+                  transition={shouldReduceMotion ? { duration: 0 } : {
+                    rotateY: { duration: 1.1, ease: [0.65, 0, 0.35, 1] },
+                    scale: { duration: 1.1, ease: [0.65, 0, 0.35, 1] },
+                    z: { duration: 1.1, ease: [0.65, 0, 0.35, 1] },
+                    filter: { duration: 1.1, times: [0, 0.5, 1], ease: "easeInOut" }
+                  }}
+                  onAnimationComplete={() => {
+                    if (isSpinning) {
+                      setSpinningCardId(null);
+                    }
+                  }}
                 >
-                  {p.title}
-                </h3>
-                
-                <p className="text-xs text-text-sub leading-relaxed mt-2 line-clamp-2">
-                  {p.description}
-                </p>
+                  {/* FRONT FACE */}
+                  <div 
+                    className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden flex flex-col justify-between bg-[#0a0e17]/85 border border-white/10 backface-hidden"
+                    style={{ 
+                      backfaceVisibility: "hidden", 
+                      WebkitBackfaceVisibility: "hidden" 
+                    }}
+                  >
+                    <div className="relative aspect-[4/3] w-full overflow-hidden">
+                      <img 
+                        src={p.image} 
+                        alt={p.title} 
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0e17] to-transparent opacity-80" />
+                      
+                      {p.metrics && (
+                        <span className="absolute top-3 left-3 text-[9px] font-mono text-[#00D1FF] bg-black/80 border border-[#00D1FF]/30 px-2.5 py-0.5 rounded-full shadow-lg backdrop-blur-md">
+                          ⚡ {p.metrics}
+                        </span>
+                      )}
+                    </div>
 
-                {/* Project tags */}
-                <div className="flex flex-wrap gap-1.5 mt-4 pt-4 border-t border-border-dark/60">
-                  {p.tags.map(tag => (
-                    <span
-                      key={tag}
-                      className="text-[9px] font-mono text-text-sub/80 bg-[#070B14] px-2 py-0.5 rounded border border-border-dark/40"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </motion.div>
+                    <div className="p-5 flex-1 flex flex-col justify-between text-left">
+                      <div>
+                        <div className="flex items-center justify-between gap-2 mb-1">
+                          <span className="text-[10px] font-mono uppercase tracking-wider text-[#00D1FF]">
+                            {p.category}
+                          </span>
+                          <span className="text-[10px] font-mono text-gray-400">
+                            {p.year}
+                          </span>
+                        </div>
+                        <h3 className="text-base font-display font-bold text-white leading-snug line-clamp-2">
+                          {p.title}
+                        </h3>
+                        <p className="text-[11px] text-gray-300 leading-relaxed mt-1.5 line-clamp-2">
+                          {p.description}
+                        </p>
+                      </div>
+
+                      <div className="flex flex-wrap gap-1 mt-2 pt-2 border-t border-white/5">
+                        {p.tags.slice(0, 2).map(tag => (
+                          <span
+                            key={tag}
+                            className="text-[9px] font-mono text-gray-400 bg-black/40 px-2 py-0.5 rounded border border-white/5"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* BACK FACE */}
+                  <div 
+                    className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden bg-gradient-to-b from-[#0a0e17] to-[#121824] border border-white/10"
+                    style={{ 
+                      backfaceVisibility: "hidden", 
+                      WebkitBackfaceVisibility: "hidden",
+                      transform: "rotateY(180deg)"
+                    }}
+                  >
+                    <AnimatePresence>
+                      {isFlipped && (
+                        <div className="flex flex-col justify-between h-full p-6 text-left">
+                          <div>
+                            <motion.div
+                              initial={{ opacity: 0, y: 15 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.45, duration: 0.35 }}
+                              className="text-xs font-mono text-[#00D1FF] uppercase tracking-widest"
+                            >
+                              {p.category}
+                            </motion.div>
+                            
+                            <motion.h4
+                              initial={{ opacity: 0, y: 15 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.55, duration: 0.35 }}
+                              className="text-xl font-display font-bold text-white mt-1.5 leading-tight"
+                            >
+                              {p.title}
+                            </motion.h4>
+
+                            {p.metrics && (
+                              <motion.div
+                                initial={{ opacity: 0, y: 15 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.65, duration: 0.35 }}
+                                className="mt-4 p-3 rounded-xl bg-[#00D1FF]/10 border border-[#00D1FF]/20 flex items-center gap-2"
+                              >
+                                <Sparkles className="w-5 h-5 text-[#00D1FF] shrink-0" />
+                                <div>
+                                  <p className="text-[9px] font-mono uppercase text-gray-400">Peak Performance</p>
+                                  <p className="text-sm font-semibold text-white">{p.metrics}</p>
+                                </div>
+                              </motion.div>
+                            )}
+
+                            <motion.p
+                              initial={{ opacity: 0, y: 15 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.75, duration: 0.35 }}
+                              className="text-xs text-gray-300 leading-relaxed mt-4 line-clamp-3"
+                            >
+                              {p.description}
+                            </motion.p>
+                          </div>
+
+                          <motion.div
+                            initial={{ opacity: 0, y: 15 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.85, duration: 0.35 }}
+                            className="flex flex-col gap-2 mt-4"
+                          >
+                            <button
+                              onClick={(e) => handleViewDetails(e, p)}
+                              className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#6C63FF] to-[#00D1FF] text-center font-semibold text-white text-xs flex items-center justify-center gap-2 hover:opacity-95 transition-all cursor-pointer shadow-inner shadow-white/15"
+                            >
+                              <span>View Full Case Study</span>
+                              <ArrowUpRight className="w-4 h-4" />
+                            </button>
+                            
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCardClick(p.id);
+                              }}
+                              className="w-full py-1 text-center font-mono text-[10px] text-gray-400 hover:text-white transition-colors cursor-pointer"
+                            >
+                              Flip Back ↺
+                            </button>
+                          </motion.div>
+                        </div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </motion.div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
 
       {/* Case-study Detail Modal Overlay */}
       <AnimatePresence>

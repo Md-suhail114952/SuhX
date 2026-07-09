@@ -102,23 +102,23 @@ export default function ProcessTimeline() {
               key={step.number}
               initial={
                 shouldReduceMotion 
-                  ? { opacity: 1, y: 0, scale: 1, rotate: 0, filter: "blur(0px)" }
-                  : { opacity: 0, y: -200, scale: 0.95, rotate: initialRotation, filter: "blur(6px)" }
+                  ? { opacity: 1, y: 0, scale: 1, rotate: 0 }
+                  : { opacity: 0, y: 40, scale: 0.98, rotate: initialRotation * 0.5 }
               }
               whileInView={
                 shouldReduceMotion
-                  ? { opacity: 1, y: 0, scale: 1, rotate: 0, filter: "blur(0px)" }
-                  : { opacity: 1, y: 0, scale: 1, rotate: targetRotation, filter: "blur(0px)" }
+                  ? { opacity: 1, y: 0, scale: 1, rotate: 0 }
+                  : { opacity: 1, y: 0, scale: 1, rotate: targetRotation * 0.5 }
               }
-              viewport={{ once: true, amount: 0.25 }}
+              viewport={{ once: true, amount: 0.15 }}
               transition={
                 shouldReduceMotion
                   ? { duration: 0.1 }
                   : {
                       type: "spring",
-                      stiffness: 120,
-                      damping: 14,
-                      delay: idx * 0.25,
+                      stiffness: 70,
+                      damping: 15,
+                      delay: idx * 0.08,
                     }
               }
               whileHover={
@@ -126,9 +126,9 @@ export default function ProcessTimeline() {
                   ? {}
                   : {
                       scale: 1.02,
-                      y: -6,
+                      y: -8,
                       rotate: 0,
-                      borderColor: "rgba(108, 99, 255, 0.4)",
+                      borderColor: "rgba(0, 209, 255, 0.4)",
                     }
               }
               className="p-8 rounded-3xl glass transition-all duration-300 relative overflow-hidden group flex flex-col justify-between cursor-default hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]"

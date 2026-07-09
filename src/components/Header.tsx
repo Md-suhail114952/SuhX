@@ -14,7 +14,7 @@ interface HeaderProps {
 export default function Header({ activeTab, setActiveTab, onRequestChatOpen }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const transparentLogo = useTransparentLogo(suhxLogo);
+  const { src: logoSrc, isReady: logoReady } = useTransparentLogo(suhxLogo);
 
   const navItems = [
     { label: "Home", id: "home" },
@@ -58,9 +58,12 @@ export default function Header({ activeTab, setActiveTab, onRequestChatOpen }: H
               onClick={() => handleNavClick("home")}
               className="flex items-center cursor-pointer group"
             >
-              <img 
-                src={transparentLogo} 
+              <motion.img 
+                src={logoSrc} 
                 alt="SUHX Logo" 
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={logoReady ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
                 className="h-7 md:h-9 w-auto object-contain select-none group-hover:scale-105 transition-transform duration-300"
                 referrerPolicy="no-referrer"
               />

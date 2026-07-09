@@ -238,7 +238,7 @@ export default function AIChatAgent({ isOpen, onClose }: AIChatAgentProps) {
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
                       isBot ? "bg-[#6C63FF]/15 border border-[#6C63FF]/30 text-[#6C63FF]" : "bg-[#00D1FF]/15 border border-[#00D1FF]/30 text-[#00D1FF]"
                     }`}>
-                      {isBot ? <Bot className="w-4.5 h-4.5" /> : <MessageSquare className="w-4 h-4" />}
+                      {isBot ? <Bot className="w-5 h-5" /> : <MessageSquare className="w-4 h-4" />}
                     </div>
 
                     {/* Chat Bubble card */}
@@ -268,7 +268,7 @@ export default function AIChatAgent({ isOpen, onClose }: AIChatAgentProps) {
               {loading && (
                 <div className="flex gap-3 max-w-[85%]">
                   <div className="w-8 h-8 rounded-lg bg-[#6C63FF]/15 border border-[#6C63FF]/30 text-[#6C63FF] flex items-center justify-center shrink-0 animate-bounce">
-                    <Bot className="w-4.5 h-4.5" />
+                    <Bot className="w-5 h-5" />
                   </div>
                   <div className="p-4 rounded-2xl glass border-border-dark flex items-center gap-2">
                     <span className="w-1.5 h-1.5 bg-[#00D1FF] rounded-full animate-bounce [animation-delay:-0.3s]" />
@@ -330,7 +330,7 @@ export default function AIChatAgent({ isOpen, onClose }: AIChatAgentProps) {
                   className="p-3.5 rounded-xl bg-gradient-to-r from-[#6C63FF] to-[#00D1FF] text-white flex items-center justify-center hover:opacity-95 active:scale-[0.95] transition-all cursor-pointer disabled:opacity-40 shadow-inner"
                   aria-label="Transmit message to SUHX-AI"
                 >
-                  <Send className="w-4.5 h-4.5" />
+                  <Send className="w-5 h-5" />
                 </button>
               </form>
             </div>

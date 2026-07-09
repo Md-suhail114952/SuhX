@@ -3,6 +3,9 @@ import * as Icons from "lucide-react";
 import { AITool } from "../types";
 import mdSuhailPortrait from "../assets/images/md_suhail_portrait_real.png.jpeg";
 import { LusionTextReveal, LusionMagnetic } from "./LusionEffects";
+import TypewriterBio from "./TypewriterBio";
+import PremiumSkillGraph from "./PremiumSkillGraph";
+import UnifiedDesignPlayground from "./UnifiedDesignPlayground";
 
 const floatingBadges = [
   {
@@ -88,15 +91,6 @@ const floatingBadges = [
 ];
 
 export default function AboutPage() {
-  const skills = [
-    { name: "UI/UX & High-Fi Prototyping", percentage: 90, color: "bg-[#00D1FF]" },
-    { name: "Graphic Composition & Layout Design", percentage: 85, color: "bg-[#6C63FF]" },
-    { name: "AI Workflow Engineering (LLM/Diffusion)", percentage: 80, color: "bg-[#A855F7]" },
-    { name: "Typography & Color Theory Matrix", percentage: 88, color: "bg-[#00D1FF]" },
-    { name: "Motion & Branding Systems", percentage: 75, color: "bg-[#6C63FF]" },
-  ];
-
-
   const aiTools: AITool[] = [
     {
       name: "ChatGPT",
@@ -181,10 +175,10 @@ export default function AboutPage() {
       </div>
 
       {/* 2. Top Profile Matrix: Image + Bio + Skill bars */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start mb-24">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-24">
         
-        {/* CEO Visual Frame - 5 cols */}
-        <div className="lg:col-span-5 relative group">
+        {/* CEO Visual Frame - 4 cols */}
+        <div className="lg:col-span-4 max-w-sm lg:max-w-none mx-auto w-full relative group">
           <div className="absolute inset-0 bg-gradient-to-tr from-primary-studio to-accent-studio rounded-3xl opacity-20 filter blur-xl group-hover:opacity-40 transition-opacity duration-500" />
           
           <div className="relative rounded-3xl overflow-hidden border border-border-dark glass-bright p-3">
@@ -239,43 +233,21 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* Bio text & progress controls - 7 cols */}
-        <div className="lg:col-span-7 flex flex-col justify-between">
+        {/* Bio text & progress controls - 8 cols */}
+        <div className="lg:col-span-8 flex flex-col justify-between h-full">
           <div>
             <span className="text-xs font-mono uppercase tracking-widest text-[#00D1FF]">// Executive Bio</span>
             <h3 className="text-2xl md:text-3xl font-display font-bold text-text-luxury mt-3 mb-4 leading-snug">
               <LusionTextReveal text="Designing Intelligent Digital Experiences" />
             </h3>
-            <p className="text-sm text-text-sub leading-relaxed mb-6">
-              Hello, I am <strong>MD Suhail (SUHX)</strong>. I operate at the absolute vanguard of visual communication. Fusing deep background classical drawing and modern vector symmetry rules with structural user psychology principles. 
-            </p>
-            <p className="text-sm text-text-sub leading-relaxed mb-8">
-              My focus is delivering award-winning, high-conversion visual design languages for top scale-ups and corporate partners. As an elite Certified AI Generalist, I integrate custom image finetunes and advanced language processing interfaces directly into product designs, ensuring we stay 10 steps ahead.
-            </p>
-          </div>
-
-          {/* Core Skill Bars */}
-          <div className="space-y-5">
-            <h4 className="text-xs font-mono tracking-widest text-text-sub uppercase">// Skill Synthesis</h4>
-            {skills.map((skill, idx) => (
-              <div key={skill.name} className="space-y-2">
-                <div className="flex justify-between text-xs font-mono text-text-sub">
-                  <span>{skill.name}</span>
-                  <span className="text-[#00D1FF]">{skill.percentage}%</span>
-                </div>
-                <div className="h-2 rounded-full bg-surface-dark/90 border border-border-dark/60 overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${skill.percentage}%` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1, delay: idx * 0.1, ease: "easeOut" }}
-                    className={`h-full rounded-full ${skill.color} shadow-[0_0_10px_rgba(0,209,255,0.3)]`}
-                  />
-                </div>
-              </div>
-            ))}
+            <TypewriterBio />
           </div>
         </div>
+      </div>
+
+      {/* Unified Design Playground (Prototyping, Color Throw, Typo, Motion) */}
+      <div className="mb-24">
+        <UnifiedDesignPlayground />
       </div>
 
       {/* 3. AI TOOLS EXPERTISE (Requested futuristic layout cards) */}
@@ -331,49 +303,11 @@ export default function AboutPage() {
 
 
 
-      {/* 5. Additional CV Meta: Grid containing Academic & Key achievements */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-24">
+      {/* 5. Additional CV Meta: Grid containing Key achievements & Clients */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-24">
         
-        {/* Education & Certs */}
-        <div className="space-y-8">
-          <div className="flex items-center gap-4">
-            <div className="w-8 h-0.5 bg-gradient-to-r from-[#00D1FF] to-transparent" />
-            <h3 className="text-xl md:text-2xl font-display font-medium text-text-luxury">
-              Education & <span className="text-gradient font-bold">Credentials</span>
-            </h3>
-          </div>
-
-          {/* Academic Card */}
-          <div className="p-6 rounded-2xl bg-surface-dark/45 border border-border-dark/60 relative overflow-hidden group">
-            <div className="absolute top-0 left-0 w-1 h-full bg-[#00D1FF] opacity-70" />
-            <span className="text-xs font-mono text-[#00D1FF]/90 block mb-2">2019 – 2022</span>
-            <h4 className="text-lg font-display font-bold text-text-luxury">Bachelor of Arts</h4>
-            <p className="text-sm text-text-sub font-medium">Jamia Millia Islamia, New Delhi</p>
-          </div>
-
-          {/* Certifications Array */}
-          <div className="space-y-4">
-            <h4 className="text-xs font-mono tracking-widest text-text-sub uppercase mb-3">// Certified Accreditations</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {[
-                { name: "UI/UX Design Professional", issuer: "Tutedude" },
-                { name: "UI/UX Design Certification", issuer: "Alison" },
-                { name: "UX Design Overview", issuer: "LinkedIn Learning" },
-                { name: "Essential InDesign Skills", issuer: "Adobe" },
-                { name: "What Is Generative AI", issuer: "LinkedIn Learning" },
-                { name: "Interactive Design Bootcamp", issuer: "Masai" },
-              ].map((cert) => (
-                <div key={cert.name} className="p-4 rounded-xl bg-surface-dark/30 border border-border-dark/40 hover:border-border-dark flex flex-col justify-center transition-colors">
-                  <span className="text-xs font-medium text-text-luxury">{cert.name}</span>
-                  <span className="text-[10px] font-mono text-text-sub/70 mt-1">{cert.issuer}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Key Achievements & Clients */}
-        <div className="space-y-8">
+        {/* Key Achievements & Milestones (7 cols) */}
+        <div className="lg:col-span-7 space-y-8">
           <div className="flex items-center gap-4">
             <div className="w-8 h-0.5 bg-gradient-to-r from-[#6C63FF] to-transparent" />
             <h3 className="text-xl md:text-2xl font-display font-medium text-text-luxury">
@@ -402,15 +336,30 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
+        </div>
 
-          {/* Premium Enterprise Partners */}
-          <div className="space-y-4">
-            <h4 className="text-xs font-mono tracking-widest text-[#00D1FF] uppercase mb-3">// Legacy Client Partners</h4>
-            <div className="flex flex-wrap gap-2">
+        {/* Premium Enterprise Partners (5 cols) */}
+        <div className="lg:col-span-5 space-y-8">
+          <div className="flex items-center gap-4">
+            <div className="w-8 h-0.5 bg-gradient-to-r from-[#00D1FF] to-transparent" />
+            <h3 className="text-xl md:text-2xl font-display font-medium text-text-luxury">
+              Legacy Client <span className="text-gradient font-bold">Partners</span>
+            </h3>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-surface-dark/45 border border-border-dark/60 relative overflow-hidden flex flex-col justify-between h-[230px] sm:h-[195px] md:h-[195px] lg:h-[220px]">
+            <div>
+              <h4 className="text-xs font-mono tracking-widest text-[#00D1FF] uppercase mb-4">// Trusted Industry Collaborations</h4>
+              <p className="text-xs text-text-sub leading-relaxed">
+                Collaborating with leading hospitals, interactive educational systems, and international hospitality brands to shape premium, clean, high-performance interfaces.
+              </p>
+            </div>
+            
+            <div className="flex flex-wrap gap-2 mt-4">
               {["AIIMS", "Byju's", "Hotel Pride Plaza", "Hotel Radisson", "JoVe", "Narayana"].map((client) => (
                 <span 
                   key={client} 
-                  className="px-4 py-2 rounded-lg bg-surface-dark/75 border border-border-dark/50 text-xs font-semibold text-text-luxury shadow-sm shadow-black/10 hover:border-[#00D1FF]/40 transition-colors cursor-default"
+                  className="px-3 py-1.5 rounded-lg bg-surface-dark/75 border border-border-dark/50 text-xs font-semibold text-text-luxury shadow-sm shadow-black/10 hover:border-[#00D1FF]/40 transition-colors cursor-default"
                 >
                   {client}
                 </span>

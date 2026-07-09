@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import Hls from "hls.js";
 import { gsap } from "gsap";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
 import { LusionMagnetic, LusionTextReveal } from "./LusionEffects";
 import suhxLogo from "../assets/images/suhx_logo_1779791742292.png";
 import { useTransparentLogo } from "../hooks/useTransparentLogo";
+import AgenticBackground from "./AgenticBackground";
 
 interface HeroProps {
   onRequestChatOpen: () => void;
@@ -39,13 +39,11 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
   const [scrollY, setScrollY] = useState(0);
   const [roleIndex, setRoleIndex] = useState(0);
   
-  const videoRef = useRef<HTMLVideoElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
 
-  const transparentLogo = useTransparentLogo(suhxLogo);
+  const { src: logoSrc, isReady: logoReady } = useTransparentLogo(suhxLogo);
 
   const roles = ["Creative Director", "UI/UX Designer", "AI Generalist", "Brand Architect"];
-  const hlsSource = "https://stream.mux.com/Aa02T7oM1wH5Mk5EEVDYhbZ1ChcdhRsS2m1NYyx4Ua1g.m3u8";
 
   // 1. Scroll listener for floating Navbar styling
   useEffect(() => {
@@ -62,39 +60,6 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
       setRoleIndex((prev) => (prev + 1) % roles.length);
     }, 2000);
     return () => clearInterval(roleTimer);
-  }, []);
-
-  // 3. Initialize HLS.js streaming video player
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    let hls: Hls | null = null;
-
-    if (Hls.isSupported()) {
-      hls = new Hls({
-        maxMaxBufferLength: 10,
-        enableWorker: true,
-        lowLatencyMode: true,
-      });
-      hls.loadSource(hlsSource);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play().catch((err) => console.log("Auto-play blocked:", err));
-      });
-    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      // Native HLS fallback (e.g. Safari)
-      video.src = hlsSource;
-      video.addEventListener("loadedmetadata", () => {
-        video.play().catch((err) => console.log("Auto-play blocked:", err));
-      });
-    }
-
-    return () => {
-      if (hls) {
-        hls.destroy();
-      }
-    };
   }, []);
 
   // 4. GSAP Entrance Animation
@@ -132,19 +97,8 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
   return (
     <div id="hero" ref={heroRef} className="relative w-full h-screen overflow-hidden bg-bg flex items-center justify-center select-none">
       
-      {/* Background HLS Video */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <video
-          ref={videoRef}
-          muted
-          loop
-          playsInline
-          className="absolute top-1/2 left-1/2 min-w-full min-h-full object-cover -translate-x-1/2 -translate-y-1/2"
-        />
-        {/* Dark overlay & Bottom gradient fade */}
-        <div className="absolute inset-0 bg-black/25 z-[1]" />
-        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-bg to-transparent z-[2]" />
-      </div>
+      {/* Cinematic Agentic Background */}
+      <AgenticBackground />
 
       {/* Hero Central Content */}
       <motion.div
@@ -167,13 +121,16 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
           variants={itemVariants}
           className="flex flex-col items-center select-none mb-2"
         >
-          <img 
-            src={transparentLogo} 
+          <motion.img 
+            src={logoSrc} 
             alt="SUHX Logo" 
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={logoReady ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.96 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
             className="h-20 sm:h-28 md:h-36 w-auto object-contain select-none drop-shadow-[0_0_35px_rgba(108,99,255,0.25)]"
             referrerPolicy="no-referrer"
           />
-          <span className="text-xs md:text-sm font-mono uppercase tracking-[1.25em] pl-[1.25em] text-white -mt-2 md:-mt-3 font-bold opacity-100 drop-shadow-[0_0_15px_rgba(255,255,255,0.45)]">
+          <span className="text-xs md:text-sm font-mono uppercase tracking-[1.25em] pl-[1.25em] text-white -mt-3 sm:-mt-5 md:-mt-6 font-bold opacity-100 drop-shadow-[0_0_15px_rgba(255,255,255,0.45)]">
             STUDIO
           </span>
         </motion.div>

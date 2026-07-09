@@ -73,6 +73,30 @@ export default function ServicesSection() {
       glowColor: "group-hover:shadow-[0_0_30px_rgb(108,99,255,0.15)] group-hover:border-[rgba(108,99,255,0.4)]",
       tags: ["Pitch Decks", "Keynote", "Data Visualizing", "Layout Mastery"],
     },
+    {
+      id: "ai-cognitive",
+      title: "AI Cognitive Orchestration",
+      description: "Engineering intelligent multi-agent workspaces and cognitive software backends utilizing autonomous workflow loops, memory vector-embedding, and custom orchestration logic.",
+      icon: "BrainCircuit",
+      glowColor: "group-hover:shadow-[0_0_30px_rgb(255,0,214,0.2)] group-hover:border-[rgba(255,0,214,0.5)]",
+      tags: ["Agentic Loops", "Vector Memory", "Orchestrator APIs", "Automation"],
+    },
+    {
+      id: "generative-ui",
+      title: "Generative UI Synthesis",
+      description: "Architecting interactive, ultra-dynamic fluid user interfaces that seamlessly compile and adapt on the fly, powered by real-time generative models and custom styling tokens.",
+      icon: "Sparkles",
+      glowColor: "group-hover:shadow-[0_0_30px_rgb(0,209,255,0.2)] group-hover:border-[rgba(0,209,255,0.5)]",
+      tags: ["Dynamic Compiles", "Adaptive Interfaces", "Token Systems", "Real-Time"],
+    },
+    {
+      id: "cinematic-assets",
+      title: "Cinematic Asset Curation",
+      description: "Harnessing elite spatial diffusion networks and neural video generators to composite gorgeous high-definition art directions, immersive motion loops, and brand assets.",
+      icon: "Flame",
+      glowColor: "group-hover:shadow-[0_0_30px_rgb(255,94,0,0.2)] group-hover:border-[rgba(255,94,0,0.5)]",
+      tags: ["Diffusion Models", "Neural Video", "Creative Assets", "Immersive"],
+    },
   ];
 
   useEffect(() => {

@@ -5,8 +5,9 @@ import { useState, useEffect } from "react";
  * This guarantees a high-fidelity, transparent PNG logo without a dark box background,
  * even when scrolling or rendering over rich color gradients.
  */
-export function useTransparentLogo(logoSrc: string): string {
+export function useTransparentLogo(logoSrc: string) {
   const [cleanLogoSrc, setCleanLogoSrc] = useState<string>(logoSrc);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     if (!logoSrc) return;
@@ -22,7 +23,10 @@ export function useTransparentLogo(logoSrc: string): string {
         canvas.width = img.width;
         canvas.height = img.height;
         const ctx = canvas.getContext("2d");
-        if (!ctx) return;
+        if (!ctx) {
+          setIsReady(true);
+          return;
+        }
 
         ctx.drawImage(img, 0, 0);
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -49,16 +53,19 @@ export function useTransparentLogo(logoSrc: string): string {
 
         ctx.putImageData(imageData, 0, 0);
         setCleanLogoSrc(canvas.toDataURL());
+        setIsReady(true);
       } catch (err) {
         console.warn("Could not dynamically strip logo background due to browser context restrictions, fallback to original:", err);
         setCleanLogoSrc(logoSrc);
+        setIsReady(true);
       }
     };
 
     img.onerror = () => {
       setCleanLogoSrc(logoSrc);
+      setIsReady(true);
     };
   }, [logoSrc]);
 
-  return cleanLogoSrc;
+  return { src: cleanLogoSrc, isReady };
 }
