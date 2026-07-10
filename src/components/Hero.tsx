@@ -40,6 +40,12 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
   const [scrollY, setScrollY] = useState(0);
   const [roleIndex, setRoleIndex] = useState(0);
   
+  // Typewriter effect state for the subtext
+  const fullDesc = "Designing intelligent, visually striking digital experiences by fusing world-class high-end creative direction with cutting-edge AI curation pipelines.";
+  const [typedDesc, setTypedDesc] = useState("");
+  const [descIndex, setDescIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  
   const heroRef = useRef<HTMLDivElement>(null);
 
   const { src: logoSrc, isReady: logoReady } = useTransparentLogo(suhxLogo);
@@ -62,6 +68,46 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
     }, 2000);
     return () => clearInterval(roleTimer);
   }, []);
+
+  // 3. Typewriter description effect with infinite loop
+  useEffect(() => {
+    if (!isDeleting) {
+      // Typing Phase
+      const startDelay = setTimeout(() => {
+        if (descIndex < fullDesc.length) {
+          const typingDelay = Math.random() * 8 + 6;
+          const timer = setTimeout(() => {
+            setTypedDesc((prev) => prev + fullDesc.charAt(descIndex));
+            setDescIndex((prev) => prev + 1);
+          }, typingDelay);
+          return () => clearTimeout(timer);
+        } else {
+          // Stay completed for 5 seconds before starting to delete
+          const pauseTimer = setTimeout(() => {
+            setIsDeleting(true);
+          }, 5000);
+          return () => clearTimeout(pauseTimer);
+        }
+      }, descIndex === 0 ? 800 : 0);
+      return () => clearTimeout(startDelay);
+    } else {
+      // Deleting Phase (Fast Eraser)
+      if (descIndex > 0) {
+        const erasingDelay = 10;
+        const timer = setTimeout(() => {
+          setTypedDesc((prev) => prev.slice(0, -1));
+          setDescIndex((prev) => prev - 1);
+        }, erasingDelay);
+        return () => clearTimeout(timer);
+      } else {
+        // Stay empty for 1 second before starting to type again
+        const pauseTimer = setTimeout(() => {
+          setIsDeleting(false);
+        }, 1000);
+        return () => clearTimeout(pauseTimer);
+      }
+    }
+  }, [descIndex, isDeleting, fullDesc]);
 
   // 4. GSAP Entrance Animation
   useEffect(() => {
@@ -123,7 +169,7 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
         {/* Large Name/Logo Display */}
         <motion.div
           variants={itemVariants}
-          className="flex flex-col items-center select-none mb-2"
+          className="flex flex-col items-center select-none -mt-2 md:-mt-4 mb-6 md:mb-8"
         >
           <motion.img 
             src={logoSrc} 
@@ -159,9 +205,10 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
         {/* Description */}
         <motion.p
           variants={itemVariants}
-          className="text-sm md:text-base text-muted max-w-md mb-6 md:mb-8 leading-relaxed font-light"
+          className="text-sm md:text-base text-muted max-w-md mb-6 md:mb-8 leading-relaxed font-light min-h-[60px]"
         >
-          Designing intelligent, visually striking digital experiences by fusing world-class high-end creative direction with cutting-edge AI curation pipelines.
+          {typedDesc}
+          <span className="inline-block w-[2px] h-[14px] md:h-[16px] ml-1 bg-[#00D1FF] animate-pulse align-middle" />
         </motion.p>
 
         {/* Action Buttons */}
