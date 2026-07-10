@@ -9,6 +9,15 @@ export interface Project {
   year: string;
   client: string;
   link: string;
+  duration?: string;
+  industry?: string;
+  problem?: string;
+  solution?: string;
+  researchHighlight?: string;
+  wireframeInsight?: string;
+  designSystemHighlight?: string;
+  prototypeFeedback?: string;
+  finalOutcome?: string;
 }
 
 export interface Service {

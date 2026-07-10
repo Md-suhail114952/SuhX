@@ -6,6 +6,7 @@ import { ArrowUp } from "lucide-react";
 import GlowBackground from "./components/GlowBackground";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
+import ClientLogos from "./components/ClientLogos";
 import ServicesSection from "./components/ServicesSection";
 import ToolsShowcase from "./components/ToolsShowcase";
 import PortfolioShowcase from "./components/PortfolioShowcase";
@@ -92,6 +93,9 @@ export default function App() {
           <main className="relative z-10">
             {/* Home Hero Section (with built-in HLS stream background) */}
             <Hero onRequestChatOpen={() => setIsChatOpen(true)} />
+
+            {/* Client Logos / Social Proof */}
+            <ClientLogos />
 
             {/* Services Section */}
             <ServicesSection />

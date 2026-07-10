@@ -67,29 +67,29 @@ export default function Testimonials() {
       </div>
 
       {/* Testimonial Core Slider Box */}
-      <div className="relative rounded-3xl p-8 md:p-12 glass overflow-hidden shadow-[0_0_30px_rgba(108,99,255,0.08)]">
+      <div className="relative rounded-3xl p-8 md:p-12 bg-surface/40 border border-border-dark/65 overflow-hidden shadow-[0_20px_45px_-15px_rgba(108,99,255,0.08)]">
         {/* Glowing aura */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] rounded-full bg-radial from-[#6c63ff0d] to-transparent blur-3xl pointer-events-none" />
 
         {/* Large atmospheric quote sign watermarked */}
-        <div className="absolute top-6 left-6 text-text-primary select-none pointer-events-none opacity-[0.03]">
-          <Quote className="w-24 h-24 stroke-[1]" />
+        <div className="absolute top-6 left-6 text-[#00D1FF] select-none pointer-events-none opacity-[0.03]">
+          <Quote className="w-24 h-24 stroke-[1.5]" />
         </div>
 
         <div className="min-h-[250px] flex flex-col justify-between relative z-10">
           <AnimatePresence mode="wait">
             <motion.div
               key={active.id}
-              initial={{ opacity: 0, x: 25 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -25 }}
-              transition={{ duration: 0.4 }}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
               className="space-y-6"
             >
               {/* Star Ratings */}
               <div className="flex items-center gap-1 text-amber-400">
                 {[...Array(active.rating)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-current stroke-[1.5]" />
+                  <Star key={i} className="w-3.5 h-3.5 fill-current stroke-[1.5]" />
                 ))}
               </div>
 
@@ -105,7 +105,7 @@ export default function Testimonials() {
                 </div>
                 <div>
                   <h4 className="font-display font-bold text-text-luxury">{active.clientName}</h4>
-                  <p className="text-xs font-mono text-text-sub uppercase tracking-wider">
+                  <p className="text-xs font-mono text-text-sub uppercase tracking-widest mt-0.5">
                     {active.designation} <span className="text-[#00D1FF]">// {active.company}</span>
                   </p>
                 </div>
@@ -122,7 +122,7 @@ export default function Testimonials() {
                   key={item.id}
                   onClick={() => setCurrentIndex(idx)}
                   className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                    currentIndex === idx ? "w-8 bg-[#00D1FF] shadow-[0_0_8px_#00D1FF]" : "w-1.5 bg-border-dark"
+                    currentIndex === idx ? "w-8 bg-[#00D1FF] shadow-[0_0_8px_rgba(0,209,255,0.5)]" : "w-1.5 bg-border-dark/80"
                   }`}
                   aria-label={`Jump to page ${idx + 1}`}
                 />
@@ -136,14 +136,14 @@ export default function Testimonials() {
                 className="w-10 h-10 rounded-xl bg-surface-dark/95 border border-border-dark text-text-sub hover:text-text-luxury hover:border-[#00D1FF]/40 flex items-center justify-center cursor-pointer transition-colors duration-200"
                 aria-label="Previous Testimonial"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={handleNext}
                 className="w-10 h-10 rounded-xl bg-surface-dark/95 border border-border-dark text-text-sub hover:text-text-luxury hover:border-[#00D1FF]/40 flex items-center justify-center cursor-pointer transition-colors duration-200"
                 aria-label="Next Testimonial"
               >
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="w-4 h-4" />
               </button>
             </div>
           </div>

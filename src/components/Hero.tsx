@@ -188,7 +188,7 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
         {/* Rotating Role Line */}
         <motion.div
           variants={itemVariants}
-          className="text-lg md:text-2xl text-muted font-light mb-3 md:mb-4 h-8 flex items-center justify-center"
+          className="text-lg md:text-2xl text-muted font-light mb-2 md:mb-3 h-8 flex items-center justify-center"
         >
           <span className="mr-2">A</span>
           <span className="relative inline-block w-48 md:w-64 text-left">
@@ -202,14 +202,40 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
           <span>lives in India.</span>
         </motion.div>
 
+        {/* Value Proposition Pillars */}
+        <motion.div
+          variants={itemVariants}
+          className="flex flex-wrap justify-center gap-x-3 gap-y-2 text-[10px] md:text-xs font-mono tracking-[0.25em] text-[#00D1FF] uppercase mb-5 opacity-90 font-semibold"
+        >
+          <span>Design</span>
+          <span className="text-[#6C63FF]/50">•</span>
+          <span>UI UX</span>
+          <span className="text-[#6C63FF]/50">•</span>
+          <span>AI Systems</span>
+          <span className="text-[#6C63FF]/50">•</span>
+          <span>Creative Solutions</span>
+        </motion.div>
+
         {/* Description */}
         <motion.p
           variants={itemVariants}
-          className="text-sm md:text-base text-muted max-w-md mb-6 md:mb-8 leading-relaxed font-light min-h-[60px]"
+          className="text-sm md:text-base text-muted max-w-lg mb-6 leading-relaxed font-light min-h-[60px]"
         >
           {typedDesc}
           <span className="inline-block w-[2px] h-[14px] md:h-[16px] ml-1 bg-[#00D1FF] animate-pulse align-middle" />
         </motion.p>
+
+        {/* Trust Indicators */}
+        <motion.div
+          variants={itemVariants}
+          className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2.5 text-[10px] md:text-xs font-mono text-muted uppercase tracking-[0.18em] mb-8 border-y border-stroke/20 py-3.5 px-6 max-w-2xl bg-surface/5 backdrop-blur-xs rounded-lg"
+        >
+          <span className="text-white/85 font-medium">6+ Years Experience</span>
+          <span className="w-1 h-1 rounded-full bg-[#6C63FF]" />
+          <span className="text-white/85 font-medium">50+ Projects Delivered</span>
+          <span className="w-1 h-1 rounded-full bg-[#00D1FF]" />
+          <span className="text-white/85 font-medium">Available Worldwide</span>
+        </motion.div>
 
         {/* Action Buttons */}
         <motion.div
@@ -217,29 +243,29 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
           className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-1 md:mt-2 z-20"
         >
           
-          {/* See Works */}
+          {/* Primary: Start Your Project */}
           <LusionMagnetic strength={0.2}>
             <button
-              onClick={() => scrollToSection("portfolio")}
-              className="group relative inline-flex items-center justify-center rounded-full text-sm font-medium px-8 py-4 bg-gradient-to-r from-[#6C63FF] to-[#00D1FF] text-white hover:text-white shadow-[0_0_20px_rgba(108,99,255,0.25)] hover:shadow-[0_0_30px_rgba(0,209,255,0.45)] overflow-hidden transition-all duration-300 hover:scale-105 cursor-pointer z-10 border-none"
+              onClick={() => scrollToSection("contact")}
+              className="group relative inline-flex items-center justify-center rounded-full text-sm font-medium px-8 py-4 bg-gradient-to-r from-[#6C63FF] to-[#00D1FF] text-white hover:text-white shadow-[0_0_20px_rgba(108,99,255,0.25)] hover:shadow-[0_0_30px_rgba(0,209,255,0.45)] overflow-hidden transition-all duration-300 hover:scale-105 cursor-pointer z-10 border-none animate-pulse-subtle"
             >
               {/* Overlay glow on hover */}
               <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
-              <span className="relative z-10 font-mono tracking-tight uppercase text-xs font-bold">Explore Creative Works</span>
+              <span className="relative z-10 font-mono tracking-tight uppercase text-xs font-bold">Start Your Project</span>
             </button>
           </LusionMagnetic>
 
-          {/* Reach Out / Chat Assistant */}
+          {/* Secondary: View Case Studies */}
           <LusionMagnetic strength={0.2}>
             <button
-              onClick={onRequestChatOpen}
+              onClick={() => scrollToSection("portfolio")}
               className="group relative inline-flex items-center justify-center rounded-full text-sm font-medium px-8 py-4 border border-stroke bg-bg/40 text-text-primary overflow-hidden transition-all duration-300 hover:scale-105 cursor-pointer hover:border-transparent z-10"
             >
               {/* Border glow wrapper */}
               <span className="absolute inset-0 rounded-full bg-transparent group-hover:accent-gradient -z-20 p-[1.5px]" />
               <span className="absolute inset-[1px] rounded-full bg-bg -z-10 group-hover:bg-surface/95 transition-all duration-300" />
               <span className="relative z-10 flex items-center gap-2 font-mono tracking-tight uppercase text-xs">
-                Interact with AI Twin
+                View Case Studies
               </span>
             </button>
           </LusionMagnetic>

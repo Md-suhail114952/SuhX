@@ -131,7 +131,7 @@ export default function ProcessTimeline() {
                       borderColor: "rgba(0, 209, 255, 0.4)",
                     }
               }
-              className="p-8 rounded-3xl glass transition-all duration-300 relative overflow-hidden group flex flex-col justify-between cursor-default hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
+              className="p-8 rounded-3xl bg-surface/40 border border-border-dark/65 transition-all duration-300 relative overflow-hidden group flex flex-col justify-between cursor-default hover:shadow-[0_20px_45px_-15px_rgba(108,99,255,0.08)]"
               id={`process-step-${step.number}`}
             >
               {/* Giant Watermarked Number Indicator */}

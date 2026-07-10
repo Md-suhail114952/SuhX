@@ -215,21 +215,21 @@ export default function ServicesSection() {
               // Dynamic Lucide selection with fallbacks
               let IconComp = (Icons as any)[service.icon] || Icons.Layout;
               if (service.icon === "Figma") {
-                IconComp = Icons.Compass;
+                IconComp = (Icons as any)["Figma"] || Icons.PenTool;
               }
 
               return (
                 <div
                   key={service.id}
-                  className={`flex flex-col justify-between p-6 rounded-2xl glass transition-all duration-500 group cursor-default relative overflow-hidden h-[340px] hover:-translate-y-2 ${cardWidthClass} ${service.glowColor}`}
+                  className={`flex flex-col justify-between p-8 rounded-2xl bg-surface/40 border border-border-dark/65 transition-all duration-500 group cursor-default relative overflow-hidden h-[360px] hover:-translate-y-3 hover:border-[#00D1FF]/40 ${cardWidthClass} ${service.glowColor}`}
                   id={`service-card-${service.id}`}
                 >
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-radial-[circle_at_top_right,rgba(108,99,255,0.02),transparent_60%] group-hover:bg-radial-[circle_at_top_right,rgba(108,99,255,0.08),transparent_60%] transition-colors duration-500" />
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-radial-[circle_at_top_right,rgba(108,99,255,0.02),transparent_60%] group-hover:bg-radial-[circle_at_top_right,rgba(0,209,255,0.08),transparent_60%] transition-colors duration-500" />
 
                   <div>
                     {/* Glowing Icon Frame */}
-                    <div className="w-12 h-12 rounded-xl bg-surface-dark/80 border border-border-dark flex items-center justify-center mb-6 text-text-luxury group-hover:text-[#00D1FF] group-hover:border-[#00D1FF]/40 group-hover:bg-[#00D1FF]/5 transition-all duration-300">
-                      <IconComp className="w-6 h-6 stroke-[1.5]" />
+                    <div className="w-12 h-12 rounded-xl bg-surface-dark/90 border border-border-dark flex items-center justify-center mb-6 text-text-luxury group-hover:text-[#00D1FF] group-hover:border-[#00D1FF]/40 group-hover:bg-[#00D1FF]/10 transition-all duration-300">
+                      <IconComp className="w-5 h-5 stroke-[1.5]" />
                     </div>
 
                     <h3 className="text-xl font-display font-bold text-text-luxury mb-3 group-hover:text-gradient transition-all duration-300">
@@ -246,7 +246,7 @@ export default function ServicesSection() {
                     {service.tags.slice(0, 3).map((tag) => (
                       <span
                         key={tag}
-                        className="text-[10px] font-mono text-text-sub/70 bg-surface-dark px-2.5 py-1 rounded-md border border-border-dark/30 group-hover:border-secondary-studio/25 group-hover:text-secondary-studio transition-colors duration-300"
+                        className="text-[10px] font-mono text-text-sub/70 bg-surface-dark px-2.5 py-1 rounded-md border border-border-dark/30 group-hover:border-[#00D1FF]/25 group-hover:text-[#00D1FF] transition-colors duration-300"
                       >
                         {tag}
                       </span>

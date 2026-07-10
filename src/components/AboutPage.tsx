@@ -245,6 +245,87 @@ export default function AboutPage() {
         </div>
       </div>
 
+      {/* WHY HIRE SUHX - Strategic Advantages (3-column Bento Cards) */}
+      <div className="mb-24">
+        <div className="flex items-center gap-4 mb-10">
+          <div className="w-10 h-0.5 bg-gradient-to-r from-[#00D1FF] to-transparent" />
+          <h3 className="text-xl md:text-2xl font-display font-bold text-text-luxury">
+            The Strategic Edge: <span className="text-gradient">Why Hire SUHX</span>
+          </h3>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Card 1: Product Strategy */}
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0 }}
+            className="p-8 rounded-2xl bg-surface/30 border border-border-dark/65 relative overflow-hidden group cursor-default"
+          >
+            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#6C63FF]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-bl-3xl" />
+            <div className="w-12 h-12 rounded-xl bg-surface-dark border border-border-dark flex items-center justify-center mb-6 text-[#6C63FF] group-hover:bg-[#6C63FF]/10 group-hover:text-[#6C63FF] transition-all duration-300">
+              <Icons.Target className="w-5 h-5 stroke-[1.5]" />
+            </div>
+            <h4 className="text-lg font-display font-bold text-text-luxury mb-3 group-hover:text-gradient-purple transition-all duration-300">
+              Product & UX Strategy
+            </h4>
+            <p className="text-xs text-text-sub leading-relaxed mb-6">
+              Fusing deep stakeholder audits, conversion telemetry mapping, and cognitive psychology to validate every interaction before drawing a single vector. Zero template assumptions.
+            </p>
+            <div className="flex items-center gap-2 pt-4 border-t border-border-dark/60">
+              <span className="text-[10px] font-mono text-[#6C63FF] uppercase tracking-wider">Metric // Absolute Precision</span>
+            </div>
+          </motion.div>
+
+          {/* Card 2: Next-Gen AI Workflow */}
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="p-8 rounded-2xl bg-surface/30 border border-border-dark/65 relative overflow-hidden group cursor-default"
+          >
+            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-[#00D1FF]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-bl-3xl" />
+            <div className="w-12 h-12 rounded-xl bg-surface-dark border border-border-dark flex items-center justify-center mb-6 text-[#00D1FF] group-hover:bg-[#00D1FF]/10 group-hover:text-[#00D1FF] transition-all duration-300">
+              <Icons.Sparkles className="w-5 h-5 stroke-[1.5]" />
+            </div>
+            <h4 className="text-lg font-display font-bold text-text-luxury mb-3 group-hover:text-gradient transition-all duration-300">
+              AI-Powered Workflow
+            </h4>
+            <p className="text-xs text-text-sub leading-relaxed mb-6">
+              Harnessing custom diffusion models, automated layout scaffolds, and structured prompting matrices to achieve 10x production speeds without losing premium custom polish.
+            </p>
+            <div className="flex items-center gap-2 pt-4 border-t border-border-dark/60">
+              <span className="text-[10px] font-mono text-[#00D1FF] uppercase tracking-wider">Velocity // 10x Faster Output</span>
+            </div>
+          </motion.div>
+
+          {/* Card 3: Business Economics */}
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="p-8 rounded-2xl bg-surface/30 border border-border-dark/65 relative overflow-hidden group cursor-default"
+          >
+            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-amber-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-bl-3xl" />
+            <div className="w-12 h-12 rounded-xl bg-surface-dark border border-border-dark flex items-center justify-center mb-6 text-amber-400 group-hover:bg-amber-400/10 group-hover:text-amber-400 transition-all duration-300">
+              <Icons.TrendingUp className="w-5 h-5 stroke-[1.5]" />
+            </div>
+            <h4 className="text-lg font-display font-bold text-text-luxury mb-3 group-hover:text-amber-300 transition-all duration-300">
+              Business Economics & Impact
+            </h4>
+            <p className="text-xs text-text-sub leading-relaxed mb-6">
+              Every typographic scale, pixel grid, and design contrast ratio is systematically built to move SaaS indicators: lowering checkout abandonments and raising organic conversions.
+            </p>
+            <div className="flex items-center gap-2 pt-4 border-t border-border-dark/60">
+              <span className="text-[10px] font-mono text-amber-400 uppercase tracking-wider">Outcome // +35% CTR Spike</span>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
       {/* Unified Design Playground (Prototyping, Color Throw, Typo, Motion) */}
       <div className="mb-24">
         <UnifiedDesignPlayground />
