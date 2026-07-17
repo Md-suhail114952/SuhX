@@ -218,14 +218,18 @@ export default function ContactForm() {
                   </div>
 
                   {/* Submission triggers */}
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="w-full py-4 rounded-xl bg-gradient-to-r from-primary-studio to-secondary-studio text-center font-semibold text-text-luxury flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.99] transition-all glow-btn cursor-pointer disabled:opacity-50"
-                  >
-                    <span>{submitting ? "Initiating Transmission..." : "Let’s Build Something Exceptional"}</span>
-                    <Send className={`w-4 h-4 ${submitting ? "animate-pulse" : ""}`} />
-                  </button>
+                  <div className="flex justify-center mt-4">
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="pill-glow-button px-10 py-3.5 text-center font-semibold"
+                    >
+                      <span className="flex items-center justify-center gap-2">
+                        <span>{submitting ? "Initiating Transmission..." : "Let’s Build Something Exceptional"}</span>
+                        <Send className={`w-4 h-4 ${submitting ? "animate-pulse" : ""}`} />
+                      </span>
+                    </button>
+                  </div>
                 </motion.form>
               ) : (
                 <motion.div

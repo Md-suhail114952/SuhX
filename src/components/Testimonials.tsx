@@ -1,10 +1,27 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { useState, useEffect, useRef } from "react";
 import { Testimonial } from "../types";
-import { Quote, ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { Quote, Star } from "lucide-react";
+import { CardStack } from "./ui/card-stack";
 
 export default function Testimonials() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 520, height: 320 });
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        const { width } = entry.contentRect;
+        // set card width to fit container with some padding, but clamp between 300px and 520px
+        const computedWidth = Math.max(300, Math.min(520, width - 32));
+        // adjust height so text fits comfortably on mobile
+        const computedHeight = computedWidth < 450 ? 330 : 280;
+        setDimensions({ width: computedWidth, height: computedHeight });
+      }
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const list: Testimonial[] = [
     {
@@ -45,15 +62,70 @@ export default function Testimonials() {
     },
   ];
 
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % list.length);
-  };
+  // Map our Testimonial models to CardStackItem interface safely
+  const cardItems = list.map((item) => ({
+    id: item.id,
+    title: item.clientName,
+    description: item.quote,
+    designation: item.designation,
+    company: item.company,
+    rating: item.rating,
+    avatarInitials: item.avatarInitials,
+  }));
 
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + list.length) % list.length);
-  };
+  const renderCard = (item: typeof cardItems[0], state: { active: boolean }) => {
+    return (
+      <div 
+        className={`h-full w-full rounded-xl p-6 md:p-8 flex flex-col justify-between overflow-hidden relative border transition-all duration-300 ${
+          state.active 
+            ? "bg-surface-dark border-[#00D1FF]/40 shadow-[0_20px_50px_rgba(0,209,255,0.08)]" 
+            : "bg-[#0A0E17] border-border-dark/60 opacity-90"
+        }`}
+      >
+        {/* Radial highlight for the active card */}
+        <div className={`absolute top-0 right-0 w-36 h-36 bg-radial-[circle_at_top_right,rgba(108,99,255,0.04),transparent_65%] transition-opacity duration-300 ${state.active ? 'opacity-100' : 'opacity-20'}`} />
 
-  const active = list[currentIndex];
+        {/* Quote symbol mark */}
+        <div className="absolute top-4 left-4 text-[#00D1FF] opacity-[0.025] select-none pointer-events-none">
+          <Quote className="w-16 h-16 stroke-[1.5]" />
+        </div>
+
+        <div className="relative z-10 flex-1 flex flex-col justify-between h-full">
+          {/* Header Row */}
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center gap-1 text-amber-400">
+              {[...Array(item.rating)].map((_, i) => (
+                <Star key={i} className="w-3.5 h-3.5 fill-current stroke-[1.5]" />
+              ))}
+            </div>
+            <span className="text-[8px] font-mono tracking-widest text-[#00D1FF] uppercase opacity-75">
+              // Client Endorsement
+            </span>
+          </div>
+
+          {/* Testimonial text */}
+          <p className="text-xs md:text-[13px] text-text-luxury font-display leading-relaxed font-light line-clamp-6 md:line-clamp-4 flex-1 mb-5">
+            "{item.description}"
+          </p>
+
+          {/* Author info footer */}
+          <div className="pt-4 border-t border-border-dark/40 flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-[#6C63FF] to-[#00D1FF] flex items-center justify-center font-bold text-text-luxury text-xs tracking-wider shadow-lg shadow-[#6C63FF]/20 select-none shrink-0">
+              {item.avatarInitials}
+            </div>
+            <div className="min-w-0">
+              <h4 className="font-display font-bold text-text-luxury text-xs truncate">
+                {item.title}
+              </h4>
+              <p className="text-[10px] font-mono text-text-sub uppercase tracking-widest mt-0.5 truncate">
+                {item.designation} <span className="text-[#00D1FF]">// {item.company}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <section id="testimonials" className="py-24 max-w-5xl mx-auto px-6 relative z-10 border-t border-border-dark/40">
@@ -66,88 +138,26 @@ export default function Testimonials() {
         </h2>
       </div>
 
-      {/* Testimonial Core Slider Box */}
-      <div className="relative rounded-3xl p-8 md:p-12 bg-surface/40 border border-border-dark/65 overflow-hidden shadow-[0_20px_45px_-15px_rgba(108,99,255,0.08)]">
-        {/* Glowing aura */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] rounded-full bg-radial from-[#6c63ff0d] to-transparent blur-3xl pointer-events-none" />
-
-        {/* Large atmospheric quote sign watermarked */}
-        <div className="absolute top-6 left-6 text-[#00D1FF] select-none pointer-events-none opacity-[0.03]">
-          <Quote className="w-24 h-24 stroke-[1.5]" />
-        </div>
-
-        <div className="min-h-[250px] flex flex-col justify-between relative z-10">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={active.id}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.35, ease: "easeOut" }}
-              className="space-y-6"
-            >
-              {/* Star Ratings */}
-              <div className="flex items-center gap-1 text-amber-400">
-                {[...Array(active.rating)].map((_, i) => (
-                  <Star key={i} className="w-3.5 h-3.5 fill-current stroke-[1.5]" />
-                ))}
-              </div>
-
-              {/* Quotation text */}
-              <blockquote className="text-lg md:text-xl font-display font-medium leading-relaxed text-text-luxury">
-                "{active.quote}"
-              </blockquote>
-
-              {/* Client meta details */}
-              <div className="flex items-center gap-4 pt-6 border-t border-border-dark/60">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#6C63FF] to-[#00D1FF] flex items-center justify-center font-bold text-text-luxury text-sm tracking-wider shadow-lg shadow-[#6C63FF]/20 select-none">
-                  {active.avatarInitials}
-                </div>
-                <div>
-                  <h4 className="font-display font-bold text-text-luxury">{active.clientName}</h4>
-                  <p className="text-xs font-mono text-text-sub uppercase tracking-widest mt-0.5">
-                    {active.designation} <span className="text-[#00D1FF]">// {active.company}</span>
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Controls indicators Row */}
-          <div className="flex items-center justify-between mt-10">
-            {/* Sliding Page Dots */}
-            <div className="flex gap-2">
-              {list.map((item, idx) => (
-                <button
-                  key={item.id}
-                  onClick={() => setCurrentIndex(idx)}
-                  className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                    currentIndex === idx ? "w-8 bg-[#00D1FF] shadow-[0_0_8px_rgba(0,209,255,0.5)]" : "w-1.5 bg-border-dark/80"
-                  }`}
-                  aria-label={`Jump to page ${idx + 1}`}
-                />
-              ))}
-            </div>
-
-            {/* Slider change handles */}
-            <div className="flex items-center gap-3">
-              <button
-                onClick={handlePrev}
-                className="w-10 h-10 rounded-xl bg-surface-dark/95 border border-border-dark text-text-sub hover:text-text-luxury hover:border-[#00D1FF]/40 flex items-center justify-center cursor-pointer transition-colors duration-200"
-                aria-label="Previous Testimonial"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                onClick={handleNext}
-                className="w-10 h-10 rounded-xl bg-surface-dark/95 border border-border-dark text-text-sub hover:text-text-luxury hover:border-[#00D1FF]/40 flex items-center justify-center cursor-pointer transition-colors duration-200"
-                aria-label="Next Testimonial"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* Resize container bound for responsive calculations */}
+      <div ref={containerRef} className="w-full flex justify-center px-4">
+        <CardStack
+          items={cardItems}
+          initialIndex={0}
+          autoAdvance
+          intervalMs={4000}
+          pauseOnHover
+          showDots
+          cardWidth={dimensions.width}
+          cardHeight={dimensions.height}
+          overlap={0.4}
+          spreadDeg={30}
+          depthPx={90}
+          tiltXDeg={8}
+          activeScale={1.02}
+          inactiveScale={0.93}
+          className="mx-auto"
+          renderCard={renderCard}
+        />
       </div>
     </section>
   );

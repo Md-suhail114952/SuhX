@@ -107,10 +107,10 @@ export default function Header({ activeTab, setActiveTab, onRequestChatOpen }: H
                   const elem = document.getElementById("contact");
                   if (elem) elem.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="py-2.5 px-4 rounded-xl bg-gradient-to-r from-primary-studio to-secondary-studio text-center text-xs font-bold font-sans text-text-luxury flex items-center gap-1 hover:opacity-90 active:scale-[0.98] transition-all glow-btn cursor-pointer"
+                className="pill-glow-button py-2 px-5 text-xs font-bold"
               >
                 <span>Build Studio Connect</span>
-                <ArrowUpRight className="w-3.5 h-3.5" />
+                <ArrowUpRight className="w-3.5 h-3.5 ml-1" />
               </button>
             </LusionMagnetic>
           </div>

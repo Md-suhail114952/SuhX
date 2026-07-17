@@ -3,8 +3,7 @@ import { gsap } from "gsap";
 import { ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
 import { LusionMagnetic, LusionTextReveal } from "./LusionEffects";
-import suhxLogo from "../assets/images/suhx_logo_1779791742292.png";
-import { useTransparentLogo } from "../hooks/useTransparentLogo";
+import mdSuhailPortrait from "../assets/images/md_suhail_portrait_real.png";
 import AgenticBackground from "./AgenticBackground";
 import FloatingSoftwareIcons from "./FloatingSoftwareIcons";
 
@@ -41,16 +40,14 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
   const [roleIndex, setRoleIndex] = useState(0);
   
   // Typewriter effect state for the subtext
-  const fullDesc = "Designing intelligent, visually striking digital experiences by fusing world-class high-end creative direction with cutting-edge AI curation pipelines.";
+  const fullDesc = "Fusing premium creative direction with intelligent AI systems to build striking digital products.";
   const [typedDesc, setTypedDesc] = useState("");
   const [descIndex, setDescIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   
   const heroRef = useRef<HTMLDivElement>(null);
 
-  const { src: logoSrc, isReady: logoReady } = useTransparentLogo(suhxLogo);
-
-  const roles = ["Creative Director", "UI/UX Designer", "AI Generalist", "Brand Architect"];
+  const roles = ["UI/UX Specialist", "AI Generalist", "Brand Architect", "Digital Innovator"];
 
   // 1. Scroll listener for floating Navbar styling
   useEffect(() => {
@@ -147,6 +144,17 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
       {/* Cinematic Agentic Background */}
       <AgenticBackground />
 
+      {/* Portrait background image on the right */}
+      <motion.img
+        src={mdSuhailPortrait}
+        alt="MD Suhail Portrait Background"
+        className="hero-portrait h-full max-h-[85vh] md:max-h-full object-contain pointer-events-none select-none"
+        initial={{ opacity: 0, x: 50, filter: "grayscale(100%)" }}
+        animate={{ opacity: 0.08, x: 0 }}
+        transition={{ duration: 1.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+        referrerPolicy="no-referrer"
+      />
+
       {/* Floating Design & Creative Softwares Icons */}
       <FloatingSoftwareIcons />
 
@@ -158,83 +166,59 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
         className="relative z-10 text-center flex flex-col items-center px-6 max-w-4xl mt-6 md:mt-10"
       >
         
-        {/* Eyebrow */}
+        {/* Eyebrow with Animated Gradient Border */}
         <motion.div
           variants={itemVariants}
-          className="inline-block text-xs text-muted uppercase tracking-[0.3em] mb-4 font-mono border border-stroke/40 px-3 py-1 rounded-full bg-surface/20 backdrop-blur-sm"
+          className="animated-gradient-border-wrapper mb-4"
         >
-          COLLECTION '26 // STUDIO PORTFOLIO
+          <div className="animated-gradient-border-inner px-4 py-1.5 text-[10px] md:text-xs text-muted uppercase tracking-[0.3em] font-mono font-semibold">
+            COLLECTION '26 // STUDIO PORTFOLIO
+          </div>
         </motion.div>
 
-        {/* Large Name/Logo Display */}
-        <motion.div
+        {/* Clean, Elegant Display Name in Velora-style (Outfit font, semibold weight, tracking-tight, with blue gradient dot) */}
+        <motion.h1
           variants={itemVariants}
-          className="flex flex-col items-center select-none -mt-2 md:-mt-4 mb-6 md:mb-8"
+          className="text-5xl sm:text-6xl md:text-7xl font-velora font-semibold tracking-tight text-white mb-4 drop-shadow-[0_0_30px_rgba(255,255,255,0.06)]"
         >
-          <motion.img 
-            src={logoSrc} 
-            alt="SUHX Logo" 
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={logoReady ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.96 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="h-20 sm:h-28 md:h-36 w-auto object-contain select-none drop-shadow-[0_0_35px_rgba(108,99,255,0.25)]"
-            referrerPolicy="no-referrer"
-          />
-          <span className="text-xs md:text-sm font-mono uppercase tracking-[1.25em] pl-[1.25em] text-white -mt-3 sm:-mt-5 md:-mt-6 font-bold opacity-100 drop-shadow-[0_0_15px_rgba(255,255,255,0.45)]">
-            STUDIO
-          </span>
-        </motion.div>
+          Md Suhail<span className="bg-gradient-to-r from-[#00D1FF] to-[#6C63FF] bg-clip-text text-transparent inline-block">.</span>
+        </motion.h1>
 
         {/* Rotating Role Line */}
         <motion.div
           variants={itemVariants}
-          className="text-lg md:text-2xl text-muted font-light mb-2 md:mb-3 h-8 flex items-center justify-center"
+          className="text-sm md:text-base text-muted/80 font-mono tracking-widest uppercase mb-6 flex items-center justify-center gap-1.5 h-6"
         >
-          <span className="mr-2">A</span>
-          <span className="relative inline-block w-48 md:w-64 text-left">
+          <span>Creative Director &</span>
+          <span className="relative inline-block w-40 md:w-48 text-left">
             <span
               key={roleIndex}
-              className="font-display italic text-text-primary animate-role-fade-in inline-block"
+              className="text-[#00D1FF] animate-role-fade-in inline-block font-semibold"
             >
               {roles[roleIndex]}
             </span>
           </span>
-          <span>lives in India.</span>
-        </motion.div>
-
-        {/* Value Proposition Pillars */}
-        <motion.div
-          variants={itemVariants}
-          className="flex flex-wrap justify-center gap-x-3 gap-y-2 text-[10px] md:text-xs font-mono tracking-[0.25em] text-[#00D1FF] uppercase mb-5 opacity-90 font-semibold"
-        >
-          <span>Design</span>
-          <span className="text-[#6C63FF]/50">•</span>
-          <span>UI UX</span>
-          <span className="text-[#6C63FF]/50">•</span>
-          <span>AI Systems</span>
-          <span className="text-[#6C63FF]/50">•</span>
-          <span>Creative Solutions</span>
         </motion.div>
 
         {/* Description */}
         <motion.p
           variants={itemVariants}
-          className="text-sm md:text-base text-muted max-w-lg mb-6 leading-relaxed font-light min-h-[60px]"
+          className="text-sm md:text-base text-muted/95 max-w-lg mb-6 leading-relaxed font-light min-h-[50px] px-4"
         >
           {typedDesc}
           <span className="inline-block w-[2px] h-[14px] md:h-[16px] ml-1 bg-[#00D1FF] animate-pulse align-middle" />
         </motion.p>
 
-        {/* Trust Indicators */}
+        {/* Minimalist Premium Metadata / Trust Indicators */}
         <motion.div
           variants={itemVariants}
-          className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2.5 text-[10px] md:text-xs font-mono text-muted uppercase tracking-[0.18em] mb-8 border-y border-stroke/20 py-3.5 px-6 max-w-2xl bg-surface/5 backdrop-blur-xs rounded-lg"
+          className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[10px] md:text-xs font-mono text-muted/50 uppercase tracking-[0.2em] mb-8 font-medium"
         >
-          <span className="text-white/85 font-medium">6+ Years Experience</span>
-          <span className="w-1 h-1 rounded-full bg-[#6C63FF]" />
-          <span className="text-white/85 font-medium">50+ Projects Delivered</span>
-          <span className="w-1 h-1 rounded-full bg-[#00D1FF]" />
-          <span className="text-white/85 font-medium">Available Worldwide</span>
+          <span>6+ Years Exp</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#6C63FF]/50" />
+          <span>50+ Projects</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#00D1FF]/50" />
+          <span>India Based</span>
         </motion.div>
 
         {/* Action Buttons */}
@@ -242,16 +226,13 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
           variants={itemVariants}
           className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-1 md:mt-2 z-20"
         >
-          
           {/* Primary: Start Your Project */}
           <LusionMagnetic strength={0.2}>
             <button
               onClick={() => scrollToSection("contact")}
-              className="group relative inline-flex items-center justify-center rounded-full text-sm font-medium px-8 py-4 bg-gradient-to-r from-[#6C63FF] to-[#00D1FF] text-white hover:text-white shadow-[0_0_20px_rgba(108,99,255,0.25)] hover:shadow-[0_0_30px_rgba(0,209,255,0.45)] overflow-hidden transition-all duration-300 hover:scale-105 cursor-pointer z-10 border-none animate-pulse-subtle"
+              className="pill-glow-button"
             >
-              {/* Overlay glow on hover */}
-              <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
-              <span className="relative z-10 font-mono tracking-tight uppercase text-xs font-bold">Start Your Project</span>
+              <span className="relative z-10 font-mono tracking-wider uppercase text-xs font-semibold">Start Your Project</span>
             </button>
           </LusionMagnetic>
 
@@ -259,12 +240,9 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
           <LusionMagnetic strength={0.2}>
             <button
               onClick={() => scrollToSection("portfolio")}
-              className="group relative inline-flex items-center justify-center rounded-full text-sm font-medium px-8 py-4 border border-stroke bg-bg/40 text-text-primary overflow-hidden transition-all duration-300 hover:scale-105 cursor-pointer hover:border-transparent z-10"
+              className="pill-glow-button opacity-85 hover:opacity-100"
             >
-              {/* Border glow wrapper */}
-              <span className="absolute inset-0 rounded-full bg-transparent group-hover:accent-gradient -z-20 p-[1.5px]" />
-              <span className="absolute inset-[1px] rounded-full bg-bg -z-10 group-hover:bg-surface/95 transition-all duration-300" />
-              <span className="relative z-10 flex items-center gap-2 font-mono tracking-tight uppercase text-xs">
+              <span className="relative z-10 flex items-center gap-2 font-mono tracking-wider uppercase text-xs font-semibold">
                 View Case Studies
               </span>
             </button>

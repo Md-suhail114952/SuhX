@@ -340,15 +340,15 @@ export default function MasterClass() {
           {/* Core Interactive Registration Interface */}
           <div className="mt-8">
             {bookingStep === "idle" && (
-              <motion.button
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.99 }}
+              <button
                 onClick={handleRegisterClick}
-                className="w-full sm:w-auto py-4 px-8 rounded-xl bg-gradient-to-r from-[#6C63FF] via-[#A855F7] to-[#00D1FF] text-text-luxury font-bold text-sm tracking-wide flex items-center justify-center gap-2.5 hover:shadow-[0_0_25px_rgba(108,99,255,0.35)] transition-all cursor-pointer"
+                className="pill-glow-button w-full sm:w-auto font-bold text-sm tracking-wide"
               >
-                <span>Register for Masterclass — ₹499 Only</span>
-                <ChevronRight className="w-4 h-4" />
-              </motion.button>
+                <span className="flex items-center justify-center gap-2">
+                  <span>Register for Masterclass — ₹499 Only</span>
+                  <ChevronRight className="w-4 h-4" />
+                </span>
+              </button>
             )}
 
             {/* Step 1: Ingest Form Modal/Expand */}
@@ -422,10 +422,10 @@ export default function MasterClass() {
                   </button>
                   <button
                     type="submit"
-                    className="py-3 px-6 rounded-xl bg-gradient-to-r from-[#6C63FF] to-[#A855F7] text-xs font-bold text-text-luxury flex items-center gap-1.5"
+                    className="pill-glow-button py-2 px-5 text-xs font-bold"
                   >
                     <span>Proceed to Payment</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-3.5 h-3.5 ml-1" />
                   </button>
                 </div>
               </motion.form>
@@ -593,7 +593,7 @@ export default function MasterClass() {
                   
                   <button
                     onClick={handlePaymentSubmit}
-                    className="py-3 px-8 rounded-xl bg-gradient-to-r from-[#6C63FF] to-[#00D1FF] text-xs font-bold text-text-luxury hover:opacity-95"
+                    className="pill-glow-button py-2.5 px-6 text-xs font-bold"
                   >
                     Confirm Secure Payment (₹499)
                   </button>
@@ -658,7 +658,7 @@ export default function MasterClass() {
                     href="https://calendar.google.com" 
                     target="_blank" 
                     rel="noreferrer"
-                    className="py-2.5 px-6 rounded-xl bg-gradient-to-r from-primary-studio to-secondary-studio text-white font-extrabold text-xs shadow-md"
+                    className="pill-glow-button py-2 px-5 text-xs font-bold"
                   >
                     Add to Calendar
                   </a>
