@@ -469,6 +469,46 @@ export default function UnifiedDesignPlayground() {
         {/* RIGHT COLUMN: The Interactive Mockup Display Canvas (The "Product") */}
         <div className="lg:col-span-8 flex items-center justify-center bg-slate-950/40 border border-border-dark/30 rounded-2xl p-4 md:p-8 relative min-h-[460px] overflow-hidden">
           
+          {/* Tech Blueprint Grid lines behind the phone mockup */}
+          <div 
+            className="absolute inset-0 opacity-25 pointer-events-none" 
+            style={{
+              backgroundImage: `
+                linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px)
+              `,
+              backgroundSize: "32px 32px",
+              backgroundPosition: "center center",
+              maskImage: "radial-gradient(circle at center, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 90%)",
+              WebkitMaskImage: "radial-gradient(circle at center, rgba(0, 0, 0, 1) 40%, rgba(0, 0, 0, 0) 90%)"
+            }}
+          />
+
+          {/* Accentuated Blueprint Axis Grid in current theme color */}
+          <div 
+            className="absolute inset-0 opacity-15 pointer-events-none transition-all duration-1000"
+            style={{
+              backgroundImage: `
+                linear-gradient(to right, ${activeColorTheme.primary}18 1px, transparent 1px),
+                linear-gradient(to bottom, ${activeColorTheme.primary}18 1px, transparent 1px)
+              `,
+              backgroundSize: "128px 128px",
+              backgroundPosition: "center center",
+              maskImage: "radial-gradient(circle at center, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 95%)",
+              WebkitMaskImage: "radial-gradient(circle at center, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 95%)"
+            }}
+          />
+
+          {/* Subtle tech-style intersection dots */}
+          <div 
+            className="absolute inset-0 opacity-[0.08] pointer-events-none transition-all duration-1000"
+            style={{
+              backgroundImage: `radial-gradient(circle, ${activeColorTheme.primary} 1.5px, transparent 1.5px)`,
+              backgroundSize: "64px 64px",
+              backgroundPosition: "center center"
+            }}
+          />
+
           {/* Dynamic background lighting keyed to selected theme */}
           <div 
             className="absolute inset-0 opacity-10 transition-colors duration-1000"
