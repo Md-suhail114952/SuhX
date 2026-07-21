@@ -110,7 +110,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 15 }}
             transition={{ type: "spring", duration: 0.5 }}
-            className="relative w-full max-w-md overflow-hidden rounded-3xl bg-[#090e17]/95 border border-border-dark/70 shadow-2xl shadow-black/80 p-6 md:p-8"
+            className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-3xl bg-[#090e17]/95 border border-border-dark/70 shadow-2xl shadow-black/80 p-6 md:p-8 scrollbar-thin scrollbar-thumb-border-dark"
           >
             {/* Corner Decorative Glowing Orbs */}
             <div className="absolute -top-12 -left-12 w-28 h-28 rounded-full bg-[#6C63FF]/10 blur-3xl pointer-events-none" />

@@ -17,7 +17,7 @@ service cloud.firestore {
     }
 
     function isValidId(id) {
-      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_-]+$');
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
     }
 
     function isNumber(val) {
@@ -84,8 +84,8 @@ service cloud.firestore {
       allow create: if isSignedIn()
                     && isValidId(bookingId)
                     && incoming().bookingId == bookingId
-                    && (incoming().keys().hasAll(['bookingId', 'userId', 'name', 'email', 'date', 'month', 'year', 'time', 'bookingRef', 'createdAt']) 
-                        && (incoming().keys().size() == 10 || (incoming().keys().size() == 11 && incoming().keys().contains('agenda'))))
+                    && incoming().keys().hasAll(['bookingId', 'userId', 'name', 'email', 'date', 'month', 'year', 'time', 'bookingRef', 'createdAt']) 
+                    && (incoming().keys().size() == 10 || (incoming().keys().size() == 11 && incoming().keys().contains('agenda')))
                     && isValidBooking(incoming());
       
       allow update: if isSignedIn()
@@ -93,8 +93,8 @@ service cloud.firestore {
                     && existing().userId == request.auth.uid
                     && incoming().userId == existing().userId
                     && incoming().bookingId == existing().bookingId
-                    && (incoming().keys().hasAll(['bookingId', 'userId', 'name', 'email', 'date', 'month', 'year', 'time', 'bookingRef', 'createdAt']) 
-                        && (incoming().keys().size() == 10 || (incoming().keys().size() == 11 && incoming().keys().contains('agenda'))))
+                    && incoming().keys().hasAll(['bookingId', 'userId', 'name', 'email', 'date', 'month', 'year', 'time', 'bookingRef', 'createdAt']) 
+                    && (incoming().keys().size() == 10 || (incoming().keys().size() == 11 && incoming().keys().contains('agenda')))
                     && isValidBooking(incoming())
                     && incoming().diff(existing()).affectedKeys().hasOnly(['agenda']);
                     

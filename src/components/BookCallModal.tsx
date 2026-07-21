@@ -276,7 +276,7 @@ export default function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full max-w-2xl bg-[#090D16]/98 border border-border-dark/80 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(108,99,255,0.12)] z-10"
+        className="relative w-full max-w-xl bg-[#090D16]/98 border border-border-dark/80 rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(108,99,255,0.12)] z-10 flex flex-col max-h-[85vh]"
       >
         {/* Background design accents */}
         <div className="absolute top-0 left-1/4 -translate-x-1/2 w-64 h-64 bg-[#00D1FF]/5 rounded-full blur-[80px] pointer-events-none" />
@@ -334,7 +334,7 @@ export default function BookCallModal({ isOpen, onClose }: BookCallModalProps) {
         )}
 
         {/* Interactive Steps Content */}
-        <div className="p-6 relative z-10">
+        <div className="p-6 relative z-10 overflow-y-auto flex-1 max-h-[calc(85vh-120px)] scrollbar-thin scrollbar-thumb-border-dark">
           <AnimatePresence mode="wait">
             {/* SECTION 1: USER IS NOT LOGGED IN - REQUIRE SIGN IN / SIGN UP FIRST */}
             {!user ? (
