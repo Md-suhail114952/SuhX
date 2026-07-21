@@ -19,12 +19,18 @@ import ContactForm from "./components/ContactForm";
 import Footer from "./components/Footer";
 import AIChatAgent from "./components/AIChatAgent";
 import LoadingScreen from "./components/LoadingScreen";
+import BookCallModal from "./components/BookCallModal";
+import AuthModal from "./components/AuthModal";
+import AdminBookingsModal from "./components/AdminBookingsModal";
 import { LusionCursor, LusionParticles } from "./components/LusionEffects";
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("home");
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isBookModalOpen, setIsBookModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   // Scroll listener to toggle scroll-to-top button and update active navigation highlight
@@ -87,12 +93,18 @@ export default function App() {
             activeTab={activeTab}
             setActiveTab={setActiveTab}
             onRequestChatOpen={() => setIsChatOpen(true)}
+            onRequestBookCall={() => setIsBookModalOpen(true)}
+            onRequestAuthOpen={() => setIsAuthModalOpen(true)}
+            onRequestAdminOpen={() => setIsAdminModalOpen(true)}
           />
 
           {/* 4. Sequential Sections */}
           <main className="relative z-10">
             {/* Home Hero Section (with built-in HLS stream background) */}
-            <Hero onRequestChatOpen={() => setIsChatOpen(true)} />
+            <Hero 
+              onRequestChatOpen={() => setIsChatOpen(true)} 
+              onRequestBookCall={() => setIsBookModalOpen(true)} 
+            />
 
             {/* Client Logos / Social Proof */}
             <ClientLogos />
@@ -134,6 +146,24 @@ export default function App() {
       <AIChatAgent 
         isOpen={isChatOpen} 
         onClose={() => setIsChatOpen(false)} 
+      />
+
+      {/* Book a Strategic Consultation Dialog */}
+      <BookCallModal 
+        isOpen={isBookModalOpen} 
+        onClose={() => setIsBookModalOpen(false)} 
+      />
+
+      {/* Authentication Dialog */}
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+      />
+
+      {/* Admin Bookings Panel Dialog */}
+      <AdminBookingsModal
+        isOpen={isAdminModalOpen}
+        onClose={() => setIsAdminModalOpen(false)}
       />
 
       {/* 7. Floating Action Hub: Chat + Top Scroll */}

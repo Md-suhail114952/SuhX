@@ -1,0 +1,45 @@
+{
+  "entities": {
+    "users": {
+      "title": "User",
+      "description": "User profile data",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["uid", "name", "email", "createdAt"]
+    },
+    "bookings": {
+      "title": "Booking",
+      "description": "Consultation booking records",
+      "type": "object",
+      "properties": {
+        "bookingId": { "type": "string" },
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "date": { "type": "number" },
+        "month": { "type": "number" },
+        "year": { "type": "number" },
+        "time": { "type": "string" },
+        "agenda": { "type": "string" },
+        "bookingRef": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["bookingId", "userId", "name", "email", "date", "month", "year", "time", "bookingRef", "createdAt"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "users",
+      "description": "User documents stored by their unique auth UID"
+    },
+    "bookings/{bookingId}": {
+      "schema": "bookings",
+      "description": "Booking documents indexed by generated booking identifier"
+    }
+  }
+}

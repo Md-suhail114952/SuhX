@@ -1,0 +1,104 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_-]+$');
+    }
+
+    function isNumber(val) {
+      return val is int || val is float;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (request.auth.token.email == "mohd.suhail114952@gmail.com" || request.auth.token.email == "Mohd.suhail114952@gmail.com");
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Validation Blueprint for User profile
+    function isValidUser(data) {
+      return data.uid == request.auth.uid
+        && data.email == request.auth.token.email
+        && data.name is string && data.name.size() <= 100 && data.name.size() > 0
+        && data.email is string && data.email.size() <= 100 && data.email.size() > 0;
+    }
+
+    // Validation Blueprint for Booking
+    function isValidBooking(data) {
+      return data.userId == request.auth.uid
+        && data.name is string && data.name.size() <= 100 && data.name.size() > 0
+        && data.email is string && data.email.size() <= 100 && data.email.size() > 0
+        && data.time is string && data.time.size() <= 20
+        && data.bookingRef is string && data.bookingRef.size() <= 20
+        && isNumber(data.date) && data.date >= 1 && data.date <= 31
+        && isNumber(data.month) && data.month >= 0 && data.month <= 11
+        && isNumber(data.year) && data.year >= 2026
+        && (!data.keys().contains('agenda') || (data.agenda is string && data.agenda.size() <= 1000));
+    }
+
+    // 2. Users Collection Rules
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isSignedIn() 
+                    && isValidId(userId)
+                    && isOwner(userId)
+                    && incoming().keys().hasAll(['uid', 'name', 'email', 'createdAt'])
+                    && incoming().keys().size() == 4
+                    && isValidUser(incoming());
+      allow update: if isOwner(userId)
+                    && isValidId(userId)
+                    && incoming().uid == existing().uid
+                    && incoming().email == existing().email
+                    && incoming().keys().hasAll(['uid', 'name', 'email', 'createdAt'])
+                    && incoming().keys().size() == 4
+                    && isValidUser(incoming())
+                    && incoming().diff(existing()).affectedKeys().hasOnly(['name']);
+    }
+
+    // 3. Bookings Collection Rules
+    match /bookings/{bookingId} {
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow get: if isSignedIn() && isValidId(bookingId) && (resource.data.userId == request.auth.uid || isAdmin());
+
+      allow create: if isSignedIn()
+                    && isValidId(bookingId)
+                    && incoming().bookingId == bookingId
+                    && (incoming().keys().hasAll(['bookingId', 'userId', 'name', 'email', 'date', 'month', 'year', 'time', 'bookingRef', 'createdAt']) 
+                        && (incoming().keys().size() == 10 || (incoming().keys().size() == 11 && incoming().keys().contains('agenda'))))
+                    && isValidBooking(incoming());
+      
+      allow update: if isSignedIn()
+                    && isValidId(bookingId)
+                    && existing().userId == request.auth.uid
+                    && incoming().userId == existing().userId
+                    && incoming().bookingId == existing().bookingId
+                    && (incoming().keys().hasAll(['bookingId', 'userId', 'name', 'email', 'date', 'month', 'year', 'time', 'bookingRef', 'createdAt']) 
+                        && (incoming().keys().size() == 10 || (incoming().keys().size() == 11 && incoming().keys().contains('agenda'))))
+                    && isValidBooking(incoming())
+                    && incoming().diff(existing()).affectedKeys().hasOnly(['agenda']);
+                    
+      allow delete: if isSignedIn() && isValidId(bookingId) && (existing().userId == request.auth.uid || isAdmin());
+    }
+  }
+}

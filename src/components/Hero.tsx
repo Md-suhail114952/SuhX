@@ -9,6 +9,7 @@ import FloatingSoftwareIcons from "./FloatingSoftwareIcons";
 
 interface HeroProps {
   onRequestChatOpen: () => void;
+  onRequestBookCall: () => void;
 }
 
 const containerVariants = {
@@ -35,7 +36,7 @@ const itemVariants = {
   }
 };
 
-export default function Hero({ onRequestChatOpen }: HeroProps) {
+export default function Hero({ onRequestChatOpen, onRequestBookCall }: HeroProps) {
   const [scrollY, setScrollY] = useState(0);
   const [roleIndex, setRoleIndex] = useState(0);
   
@@ -236,13 +237,25 @@ export default function Hero({ onRequestChatOpen }: HeroProps) {
             </button>
           </LusionMagnetic>
 
+          {/* Special Booking: Book a Call */}
+          <LusionMagnetic strength={0.2}>
+            <button
+              onClick={onRequestBookCall}
+              className="py-3.5 px-6 rounded-full bg-gradient-to-r from-[#6C63FF]/20 to-[#00D1FF]/20 border border-[#6C63FF]/55 hover:border-[#00D1FF] text-white hover:shadow-[0_0_20px_rgba(0,209,255,0.2)] transition-all cursor-pointer flex items-center gap-2"
+            >
+              <span className="font-mono tracking-wider uppercase text-xs font-semibold flex items-center gap-1.5">
+                Book a Call <span className="inline-block w-2 h-2 rounded-full bg-[#00D1FF] animate-pulse" />
+              </span>
+            </button>
+          </LusionMagnetic>
+
           {/* Secondary: View Case Studies */}
           <LusionMagnetic strength={0.2}>
             <button
               onClick={() => scrollToSection("portfolio")}
-              className="pill-glow-button opacity-85 hover:opacity-100"
+              className="py-3.5 px-6 rounded-full bg-surface-dark/40 border border-border-dark/60 hover:border-text-sub/50 text-text-sub hover:text-white transition-all cursor-pointer"
             >
-              <span className="relative z-10 flex items-center gap-2 font-mono tracking-wider uppercase text-xs font-semibold">
+              <span className="font-mono tracking-wider uppercase text-xs font-semibold">
                 View Case Studies
               </span>
             </button>
