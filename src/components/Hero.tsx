@@ -10,6 +10,7 @@ import FloatingSoftwareIcons from "./FloatingSoftwareIcons";
 interface HeroProps {
   onRequestChatOpen: () => void;
   onRequestBookCall: () => void;
+  onRequestContactOpen?: () => void;
 }
 
 const containerVariants = {
@@ -36,7 +37,7 @@ const itemVariants = {
   }
 };
 
-export default function Hero({ onRequestChatOpen, onRequestBookCall }: HeroProps) {
+export default function Hero({ onRequestChatOpen, onRequestBookCall, onRequestContactOpen }: HeroProps) {
   const [scrollY, setScrollY] = useState(0);
   const [roleIndex, setRoleIndex] = useState(0);
   
@@ -230,10 +231,16 @@ export default function Hero({ onRequestChatOpen, onRequestBookCall }: HeroProps
           {/* Primary: Start Your Project */}
           <LusionMagnetic strength={0.2}>
             <button
-              onClick={() => scrollToSection("contact")}
-              className="pill-glow-button"
+              onClick={() => {
+                if (onRequestContactOpen) {
+                  onRequestContactOpen();
+                } else {
+                  scrollToSection("contact");
+                }
+              }}
+              className="py-3.5 px-6 rounded-full bg-surface-dark/40 border border-border-dark/60 text-text-sub hover:text-white hover:bg-gradient-to-r hover:from-[#6C63FF]/20 hover:to-[#00D1FF]/20 hover:border-[#00D1FF] hover:shadow-[0_0_20px_rgba(0,209,255,0.25)] transition-all duration-300 cursor-pointer"
             >
-              <span className="relative z-10 font-mono tracking-wider uppercase text-xs font-semibold">Start Your Project</span>
+              <span className="font-mono tracking-wider uppercase text-xs font-semibold">Start Your Project</span>
             </button>
           </LusionMagnetic>
 

@@ -31,6 +31,7 @@ export default function App() {
   const [isBookModalOpen, setIsBookModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   // Scroll listener to toggle scroll-to-top button and update active navigation highlight
@@ -96,6 +97,7 @@ export default function App() {
             onRequestBookCall={() => setIsBookModalOpen(true)}
             onRequestAuthOpen={() => setIsAuthModalOpen(true)}
             onRequestAdminOpen={() => setIsAdminModalOpen(true)}
+            onRequestContactOpen={() => setIsContactModalOpen(true)}
           />
 
           {/* 4. Sequential Sections */}
@@ -104,6 +106,7 @@ export default function App() {
             <Hero 
               onRequestChatOpen={() => setIsChatOpen(true)} 
               onRequestBookCall={() => setIsBookModalOpen(true)} 
+              onRequestContactOpen={() => setIsContactModalOpen(true)}
             />
 
             {/* Client Logos / Social Proof */}
@@ -132,9 +135,6 @@ export default function App() {
 
             {/* Testimonials */}
             <Testimonials />
-
-            {/* Contact Form */}
-            <ContactForm />
           </main>
 
           {/* 5. Footer */}
@@ -164,6 +164,12 @@ export default function App() {
       <AdminBookingsModal
         isOpen={isAdminModalOpen}
         onClose={() => setIsAdminModalOpen(false)}
+      />
+
+      {/* Interactive Contact Parameters Popup Modal */}
+      <ContactForm
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
       />
 
       {/* 7. Floating Action Hub: Chat + Top Scroll */}

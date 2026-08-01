@@ -13,6 +13,7 @@ interface HeaderProps {
   onRequestBookCall: () => void;
   onRequestAuthOpen: () => void;
   onRequestAdminOpen: () => void;
+  onRequestContactOpen?: () => void;
 }
 
 export default function Header({ 
@@ -21,7 +22,8 @@ export default function Header({
   onRequestChatOpen, 
   onRequestBookCall,
   onRequestAuthOpen,
-  onRequestAdminOpen
+  onRequestAdminOpen,
+  onRequestContactOpen
 }: HeaderProps) {
   const { user, logOut } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
@@ -64,108 +66,108 @@ export default function Header({
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           
-          {/* Logo Frame */}
-          <LusionMagnetic strength={0.25}>
-            <div 
-              onClick={() => handleNavClick("home")}
-              className="flex items-center cursor-pointer group"
-            >
-              <motion.img 
-                src={logoSrc} 
-                alt="SUHX Logo" 
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={logoReady ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.96 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="h-7 md:h-9 w-auto object-contain select-none group-hover:scale-105 transition-transform duration-300"
-                referrerPolicy="no-referrer"
-              />
-            </div>
-          </LusionMagnetic>
+          {/* Logo Frame - Completely Stable */}
+          <div 
+            onClick={() => handleNavClick("home")}
+            className="flex items-center cursor-pointer select-none"
+          >
+            <motion.img 
+              src={logoSrc} 
+              alt="SUHX Logo" 
+              initial={{ opacity: 0 }}
+              animate={logoReady ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="h-7 md:h-9 w-auto object-contain select-none"
+              referrerPolicy="no-referrer"
+            />
+          </div>
 
-          {/* Desktop Links */}
-          <nav className="hidden md:flex items-center gap-1.5 p-1 rounded-xl bg-surface-dark/70 border border-border-dark/40 backdrop-blur-md">
+          {/* Desktop Links - Decent, Minimal Font & Completely Stable with Animated Underline */}
+          <nav className="hidden md:flex items-center gap-6">
             {navItems.map((item) => (
-              <LusionMagnetic key={item.id} strength={0.35}>
-                <button
-                  onClick={() => handleNavClick(item.id)}
-                  className={`px-4 py-2 text-xs font-mono rounded-lg transition-all cursor-pointer ${
-                    activeTab === item.id
-                      ? "bg-gradient-to-r from-[#6C63FF]/15 to-[#00D1FF]/15 border-border-dark text-text-luxury border"
-                      : "text-text-sub hover:text-text-luxury hover:bg-surface-dark/10"
-                  }`}
-                >
-                  {item.label}
-                </button>
-              </LusionMagnetic>
+              <button
+                key={item.id}
+                onClick={() => handleNavClick(item.id)}
+                className={`relative py-1.5 px-1 text-xs md:text-sm font-medium transition-colors cursor-pointer tracking-normal ${
+                  activeTab === item.id
+                    ? "text-white font-semibold"
+                    : "text-text-sub hover:text-white"
+                }`}
+              >
+                {item.label}
+                {activeTab === item.id && (
+                  <motion.div
+                    layoutId="activeNavUnderline"
+                    className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-[#6C63FF] via-[#00D1FF] to-[#A855F7] shadow-[0_0_8px_rgba(0,209,255,0.8)] rounded-full"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </button>
             ))}
           </nav>
 
-          {/* Actions CTA buttons */}
+          {/* Actions CTA buttons - Stable Position */}
           <div className="hidden md:flex items-center gap-3">
             {/* User Auth Portal */}
-            <LusionMagnetic strength={0.2}>
-              {user ? (
-                <div className="flex items-center gap-2 h-9 pl-3 pr-2 rounded-xl bg-surface-dark/90 border border-[#00D1FF]/25 text-xs font-mono shadow-[0_0_15px_rgba(0,209,255,0.04)] select-none">
-                  <div className="w-5.5 h-5.5 rounded-lg bg-gradient-to-r from-[#6C63FF] to-[#00D1FF] flex items-center justify-center text-[10px] font-bold text-white shadow-md shadow-[#6C63FF]/20 uppercase select-none">
-                    {user.displayName ? user.displayName.slice(0, 1) : (user.email ? user.email.slice(0, 1) : "U")}
-                  </div>
-                  <span className="text-text-luxury font-medium max-w-[90px] truncate text-[11px] uppercase tracking-wider">
-                    {user.displayName || "Partner"}
-                  </span>
-                  <button
-                    onClick={() => logOut()}
-                    className="p-1 rounded-lg text-muted hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
-                    title="Sign Out"
-                  >
-                    <LogOut className="w-3.5 h-3.5" />
-                  </button>
+            {user ? (
+              <div className="flex items-center gap-2 h-9 pl-3 pr-2 rounded-xl bg-surface-dark/90 border border-[#00D1FF]/25 text-xs font-sans shadow-[0_0_15px_rgba(0,209,255,0.04)] select-none">
+                <div className="w-5.5 h-5.5 rounded-lg bg-gradient-to-r from-[#6C63FF] to-[#00D1FF] flex items-center justify-center text-[10px] font-bold text-white shadow-md shadow-[#6C63FF]/20 uppercase select-none">
+                  {user.displayName ? user.displayName.slice(0, 1) : (user.email ? user.email.slice(0, 1) : "U")}
                 </div>
-              ) : (
+                <span className="text-text-luxury font-medium max-w-[90px] truncate text-[11px] uppercase tracking-wider">
+                  {user.displayName || "Partner"}
+                </span>
                 <button
-                  onClick={onRequestAuthOpen}
-                  className="flex items-center gap-1.5 h-9 px-4 rounded-xl bg-[#00D1FF]/5 border border-[#00D1FF]/30 text-xs font-mono text-[#00D1FF] hover:text-white hover:border-[#00D1FF] hover:bg-[#00D1FF]/10 transition-all cursor-pointer shadow-[0_0_12px_rgba(0,209,255,0.06)]"
+                  onClick={() => logOut()}
+                  className="p-1 rounded-lg text-muted hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
+                  title="Sign Out"
                 >
-                  <User className="w-3.5 h-3.5" />
-                  <span className="font-bold tracking-wide uppercase">Sign In</span>
+                  <LogOut className="w-3.5 h-3.5" />
                 </button>
-              )}
-            </LusionMagnetic>
+              </div>
+            ) : (
+              <button
+                onClick={onRequestAuthOpen}
+                className="flex items-center gap-1.5 h-9 px-4 rounded-xl bg-[#00D1FF]/5 border border-[#00D1FF]/30 text-xs font-sans text-[#00D1FF] hover:text-white hover:border-[#00D1FF] hover:bg-[#00D1FF]/10 transition-all cursor-pointer shadow-[0_0_12px_rgba(0,209,255,0.06)] font-semibold tracking-wide"
+              >
+                <User className="w-3.5 h-3.5" />
+                <span>Sign In</span>
+              </button>
+            )}
 
             {/* Admin Dashboard Trigger */}
             {user && user.email?.toLowerCase() === "mohd.suhail114952@gmail.com" && (
-              <LusionMagnetic strength={0.2}>
-                <button
-                  onClick={onRequestAdminOpen}
-                  className="flex items-center gap-1.5 h-9 px-4 rounded-xl bg-amber-500/10 border border-amber-500/40 text-xs font-mono text-amber-400 hover:text-white hover:border-amber-400 hover:bg-amber-500/25 transition-all cursor-pointer shadow-[0_0_12px_rgba(245,158,11,0.08)]"
-                >
-                  <Shield className="w-3.5 h-3.5" />
-                  <span className="font-bold tracking-wide uppercase">Admin Panel</span>
-                </button>
-              </LusionMagnetic>
+              <button
+                onClick={onRequestAdminOpen}
+                className="flex items-center gap-1.5 h-9 px-4 rounded-xl bg-amber-500/10 border border-amber-500/40 text-xs font-sans text-amber-400 hover:text-white hover:border-amber-400 hover:bg-amber-500/25 transition-all cursor-pointer shadow-[0_0_12px_rgba(245,158,11,0.08)] font-semibold tracking-wide"
+              >
+                <Shield className="w-3.5 h-3.5" />
+                <span>Admin Panel</span>
+              </button>
             )}
 
-            <LusionMagnetic strength={0.25}>
-              <button
-                onClick={onRequestBookCall}
-                className="flex items-center justify-center gap-1.5 h-9 px-4 rounded-xl bg-gradient-to-r from-[#6C63FF] to-[#00D1FF] text-white font-mono text-xs font-bold hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer shadow-[0_0_15px_rgba(108,99,255,0.25)]"
-              >
-                <span>Book a Call</span>
-                <Sparkles className="w-3.5 h-3.5 ml-0.5 animate-pulse" />
-              </button>
-            </LusionMagnetic>
+            <button
+              onClick={onRequestBookCall}
+              className="flex items-center justify-center gap-1.5 h-9 px-4 rounded-xl bg-gradient-to-r from-[#6C63FF] to-[#00D1FF] text-white font-sans text-xs font-semibold hover:brightness-110 active:scale-[0.98] transition-all cursor-pointer shadow-[0_0_15px_rgba(108,99,255,0.25)] tracking-wide"
+            >
+              <span>Book a Call</span>
+              <Sparkles className="w-3.5 h-3.5 ml-0.5 animate-pulse" />
+            </button>
 
-            <LusionMagnetic strength={0.2}>
-              <button
-                onClick={() => {
+            <button
+              onClick={() => {
+                if (onRequestContactOpen) {
+                  onRequestContactOpen();
+                } else {
                   const elem = document.getElementById("contact");
                   if (elem) elem.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="flex items-center justify-center gap-1 h-9 px-4 rounded-xl bg-surface-dark border border-border-dark text-xs font-mono text-text-sub hover:text-text-luxury hover:border-[#00D1FF]/40 hover:bg-[#00D1FF]/5 transition-all cursor-pointer"
-              >
-                <span>Build Connect</span>
-                <ArrowUpRight className="w-3 h-3 ml-0.5 inline" />
-              </button>
-            </LusionMagnetic>
+                }
+              }}
+              className="flex items-center justify-center gap-1 h-9 px-4 rounded-xl bg-surface-dark border border-border-dark text-xs font-sans font-medium text-text-sub hover:text-text-luxury hover:border-[#00D1FF]/40 hover:bg-[#00D1FF]/5 transition-all cursor-pointer"
+            >
+              <span>Build Connect</span>
+              <ArrowUpRight className="w-3 h-3 ml-0.5 inline" />
+            </button>
           </div>
 
           {/* Mobile menu trigger */}
