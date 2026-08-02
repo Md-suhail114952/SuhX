@@ -8,18 +8,20 @@ import {
   HeartPulse, 
   Building, 
   Sparkles,
-  ExternalLink
+  ExternalLink,
+  Home
 } from "lucide-react";
 
 export default function ClientLogos() {
   const brands = [
-    { name: "AIIMS", type: "Healthcare", icon: HeartPulse, color: "#00D1FF", url: "https://www.aiims.edu/index.php/en" },
+    { name: "AIIMS", type: "Hospital", icon: HeartPulse, color: "#00D1FF", url: "https://www.aiims.edu/index.php/en" },
     { name: "BYJU'S", type: "EdTech", icon: GraduationCap, color: "#6C63FF", url: "https://byjus.com/" },
     { name: "RADISSON", type: "Hospitality", icon: Building2, color: "#A855F7", url: "https://www.radissonhotels.com/" },
     { name: "PRIDE HOTELS", type: "Luxury Stay", icon: Crown, color: "#EAB308", url: "https://www.pridehotel.com/" },
-    { name: "JOVE", type: "Scientific Video", icon: Microscope, color: "#10B981", url: "https://www.jove.com/" },
-    { name: "NARAYANA", type: "Health Group", icon: Activity, color: "#EC4899", url: "https://narayanagroup.com/" },
+    { name: "JOVE", type: "EdTech", icon: Microscope, color: "#10B981", url: "https://www.jove.com/" },
+    { name: "NARAYANA", type: "EdTech", icon: GraduationCap, color: "#EC4899", url: "https://narayanagroup.com/" },
     { name: "NYSA", type: "Real Estate", icon: Building, color: "#3B82F6", url: "https://www.nysaluxuryhomes.com/" },
+    { name: "HOUSING.COM", type: "Real Estate", icon: Home, color: "#EF4444", url: "https://housing.com/" },
     { name: "ROYALE HEALTH", type: "Wellness Gummies", icon: Sparkles, color: "#F59E0B", url: "https://www.royalehealthgummies.com/" },
   ];
 
