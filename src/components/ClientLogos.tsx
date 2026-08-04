@@ -1,13 +1,9 @@
-import { motion } from "motion/react";
 import { 
-  Activity, 
   GraduationCap, 
   Building2, 
   Crown, 
   Microscope, 
   HeartPulse, 
-  Building, 
-  Sparkles,
   ExternalLink,
   Home
 } from "lucide-react";
@@ -20,9 +16,7 @@ export default function ClientLogos() {
     { name: "PRIDE HOTELS", type: "Luxury Stay", icon: Crown, color: "#EAB308", url: "https://www.pridehotel.com/" },
     { name: "JOVE", type: "EdTech", icon: Microscope, color: "#10B981", url: "https://www.jove.com/" },
     { name: "NARAYANA", type: "EdTech", icon: GraduationCap, color: "#EC4899", url: "https://narayanagroup.com/" },
-    { name: "NYSA", type: "Real Estate", icon: Building, color: "#3B82F6", url: "https://www.nysaluxuryhomes.com/" },
     { name: "HOUSING.COM", type: "Real Estate", icon: Home, color: "#EF4444", url: "https://housing.com/" },
-    { name: "ROYALE HEALTH", type: "Wellness Gummies", icon: Sparkles, color: "#F59E0B", url: "https://www.royalehealthgummies.com/" },
   ];
 
   // Duplicate list to achieve a seamless drift effect
@@ -106,4 +100,5 @@ export default function ClientLogos() {
     </section>
   );
 }
+
 

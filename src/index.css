@@ -206,33 +206,36 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5px; /* Premium crisp border thickness */
+  padding: 1px; /* Ultra-thin crisp stroke border */
   border-radius: 9999px; /* Rounded pill */
   overflow: hidden;
+  background: transparent;
 }
 
 .animated-gradient-border-wrapper::before {
   content: '';
   position: absolute;
+  top: -50%;
+  left: -50%;
   width: 200%;
   height: 200%;
   background: conic-gradient(
-    from 0deg,
-    #00D1FF,
-    #6C63FF,
-    #9D4EDD,
-    #00D1FF
+    from 0deg at 50% 50%,
+    transparent 0deg,
+    transparent 240deg,
+    #00D1FF 300deg,
+    #6C63FF 335deg,
+    #A855F7 355deg,
+    transparent 360deg
   );
-  animation: spin-gradient 10s linear infinite;
+  animation: spin-gradient 5s linear infinite;
   z-index: 0;
 }
 
 .animated-gradient-border-inner {
   position: relative;
   z-index: 1;
-  background: rgba(10, 18, 40, 0.9);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: #070B14; /* 100% solid opaque background to block any animation bleed behind shape */
   border-radius: 9999px;
   width: 100%;
   height: 100%;

@@ -437,13 +437,24 @@ export default function AboutPage() {
             </div>
             
             <div className="flex flex-wrap gap-2 mt-4">
-              {["AIIMS", "Byju's", "Hotel Pride Plaza", "Hotel Radisson", "JoVe", "Narayana"].map((client) => (
-                <span 
-                  key={client} 
-                  className="px-3 py-1.5 rounded-lg bg-surface-dark/75 border border-border-dark/50 text-xs font-semibold text-text-luxury shadow-sm shadow-black/10 hover:border-[#00D1FF]/40 transition-colors cursor-default"
+              {[
+                { name: "AIIMS", url: "https://www.aiims.edu/index.php/en" },
+                { name: "Byju's", url: "https://byjus.com/" },
+                { name: "Hotel Radisson", url: "https://www.radissonhotels.com/" },
+                { name: "Hotel Pride Plaza", url: "https://www.pridehotel.com/" },
+                { name: "JoVe", url: "https://www.jove.com/" },
+                { name: "Narayana", url: "https://narayanagroup.com/" },
+                { name: "Housing.com", url: "https://housing.com/" },
+              ].map((client) => (
+                <a 
+                  key={client.name} 
+                  href={client.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1.5 rounded-lg bg-surface-dark/75 border border-border-dark/50 text-xs font-semibold text-text-luxury shadow-sm shadow-black/10 hover:border-[#00D1FF]/40 hover:text-white transition-colors cursor-pointer"
                 >
-                  {client}
-                </span>
+                  {client.name}
+                </a>
               ))}
             </div>
           </div>
